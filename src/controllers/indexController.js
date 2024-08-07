@@ -3,7 +3,7 @@ import path from "path";
 
 const controller = {
     index: (req, res) => {
-        res.render("index");
+        res.send("INDEX Home");
     }
 }
 
