@@ -1,12 +1,9 @@
 import fs from "fs";
 import path from "path";
-import { config } from "../dbconfig.js";
+import { client } from "../dbconfig.js";
 
 const controller = {
-    register: async (req, res) => {
-        const client = new Client(config);
-        await client.connect();
-
+    registerPost: async (req, res) => {
         const { nombre, apellido, username, email, ocupacion, pais  } = req.body;
 
         const jerarquia = 0;
@@ -19,7 +16,10 @@ const controller = {
         } catch (error) {
             res.json({ message: "Error al registrar usuario" });
         }
+    },
+    register: (req, res) => {
+        res.render("register");
     }
 }
 
-export default controller;
+export default controller; 

@@ -1,10 +1,15 @@
 import "dotenv/config";
+import pg from "pg";
 
-export const config = {
-    host: process.env.POSTGRES_HOST,
-    database: process.env.POSTGRES_DATABASE,
-    user: process.env.POSTGRES_USER,
-    password: process.env.POSTGRES_PASSWORD,
+const { Client } = pg;
+
+export const client = new Client({
+    host: "ep-icy-boat-a4kjiwri-pooler.us-east-1.aws.neon.tech",
+    database: "verceldb",
+    user: "default",
+    password: "laJDH9yGOwR6",
     port: 5432,
-    ssl: true,
-};
+    ssl: true
+});
+
+client.connect();
