@@ -14,9 +14,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 import indexRouter from "./src/routers/indexRouter.js";
+import userRouter from "./src/routers/userRouter.js";
 
 // Configuramos las rutas index
 app.use("/", indexRouter);
+
+// Configuramos las rutas user
+app.use("/user", userRouter);
 
 // Configurar ERR 404
 app.use((req, res, next) => {
