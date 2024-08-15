@@ -1,3 +1,10 @@
+### Devolver todos los artistas
+GET http://localhost:8000/user/allUsers HTTP/1.1
+
+### Devolver un usuario especifico
+GET http://localhost:8000/user/user/5 HTTP/1.1
+
+### Agregar Usuarios
 POST http://localhost:8000/user/register HTTP/1.1
 Content-Type: application/json
 
@@ -6,6 +13,20 @@ Content-Type: application/json
     "apellido": "Safdieh",
     "username": "OliverSafdieh",
     "email": "oliversafdieh@gmail.com",
+    "password": "Oliver123",
     "ocupacion": 1,
     "pais": 1
+}
+
+### Editar Usuario Especifico
+PUT http://localhost:8000/user/editUser/5
+
+{
+   "nombre": "PruebaEditadaNombre",
+    "apellido": "PruebaEditadaApellido",
+    "username": "PruebaEditadaUsername",
+    "email": "prueba@malaria.com",
+    "password": "Prueba",
+    "ocupacion": 1,
+    "pais": 1 
 }
