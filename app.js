@@ -10,17 +10,24 @@ app.use(express.static("./public"));
 app.set("view engine", "ejs");
 
 // Capturar el body
-app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 import indexRouter from "./src/routers/indexRouter.js";
 import userRouter from "./src/routers/userRouter.js";
+import analyzeRouter from "./src/routers/analyzeRouter.js";
+import patientsRouter from "./src/routers/patientsRouter.js";
 
 // Configuramos las rutas index
 app.use("/", indexRouter);
 
 // Configuramos las rutas user
 app.use("/user", userRouter);
+
+// Configuramos las rutas de analisis
+app.use("/analyze", analyzeRouter);
+
+// Configuramos las rutas de pacientes
+app.use("/patients", patientsRouter);
 
 // Configurar ERR 404
 app.use((req, res, next) => {

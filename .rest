@@ -1,0 +1,11 @@
+POST http://localhost:8000/user/register HTTP/1.1
+Content-Type: application/json
+
+{
+    "nombre": "Oliver",
+    "apellido": "Safdieh",
+    "username": "OliverSafdieh",
+    "email": "oliversafdieh@gmail.com",
+    "ocupacion": 1,
+    "pais": 1
+}
