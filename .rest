@@ -1,3 +1,5 @@
+### Usuarios
+
 ### Devolver todos los artistas
 GET http://localhost:8000/user/allUsers HTTP/1.1
 
@@ -9,11 +11,11 @@ POST http://localhost:8000/user/register HTTP/1.1
 Content-Type: application/json
 
 {
-    "nombre": "Oliver",
-    "apellido": "Safdieh",
-    "username": "OliverSafdieh",
-    "email": "oliversafdieh@gmail.com",
-    "password": "Oliver123",
+    "nombre": "Jazmin",
+    "apellido": "Niew",
+    "username": "JazNiew",
+    "email": "jazniew@gmail.com",
+    "password": "Jaz123",
     "ocupacion": 1,
     "pais": 1
 }
@@ -29,4 +31,19 @@ PUT http://localhost:8000/user/editUser/5
     "password": "Prueba",
     "ocupacion": 1,
     "pais": 1 
+}
+
+### Pacientes
+
+### Crear un paciente
+
+POST http://localhost:8000/patients/registerPatient HTTP/1.1
+
+{
+    "nombre": "Lucila",
+    "apellido": "Dayan",
+    "descripcion": "Le pico un mosquito mientras grababa un TikTok en el campo",
+    "pais": 1,
+    "email": "luciladayan@gmail.com",
+    "phone": "1145545459"
 }

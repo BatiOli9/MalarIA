@@ -4,8 +4,6 @@ import { client } from "../dbconfig.js";
 
 const controller = {
     registerPost: async (req, res) => {
-        console.log(req.body);
-
         const nombre = req.body.nombre;
         const apellido = req.body.apellido;
         const username = req.body.username;
@@ -65,12 +63,13 @@ const controller = {
     },
     editUser: async (req, res) => {
         const id = req.params.id;
-        const { nombre, apellido, username, email, id_pais, id_ocupacion, password } = req.body;
-    
-        // Verificar que todos los campos requeridos están presentes
-        if (!nombre || !apellido || !username || !email || !id_pais || !id_ocupacion || !password) {
-            return res.status(400).json({ message: "Todos los campos son requeridos" });
-        }
+        const nombre = req.body.nombre;
+        const apellido = req.body.apellido;
+        const email = req.body.email;
+        const username = req.body.username;
+        const password = req.body.password;
+        const id_pais = req.body.pais;
+        const id_ocupacion = req.body.ocupacion;
     
         console.log(
             nombre,
@@ -82,7 +81,7 @@ const controller = {
             id_ocupacion
         );
     
-        let query = 'UPDATE public.users SET nombre = $1, apellido = $2, username = $3, password = $4, email = $5, id_pais = $6, id_ocupacion = $7 WHERE id = $8';
+        /* let query = 'UPDATE public.users SET nombre = $1, apellido = $2, username = $3, password = $4, email = $5, id_pais = $6, id_ocupacion = $7 WHERE id = $8';
     
         try {
             await client.query(query, [nombre, apellido, username, password, email, id_pais, id_ocupacion, id]);
@@ -90,7 +89,7 @@ const controller = {
         } catch (err) {
             console.error('Error al editar usuario:', err); // Imprime el error en la consola
             res.status(500).json({ message: "Error al editar usuario", err: err.message });
-        }
+        } */
     }
 }
 
