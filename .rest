@@ -22,6 +22,7 @@ Content-Type: application/json
 
 ### Editar Usuario Especifico
 PUT http://localhost:8000/user/editUser/5
+Content-Type: application/json
 
 {
    "nombre": "PruebaEditadaNombre",
@@ -33,11 +34,14 @@ PUT http://localhost:8000/user/editUser/5
     "pais": 1 
 }
 
+### Eliminar Usuario Especifico
+DELETE http://localhost:8000/user/deleteUser/18
+
 ### Pacientes
 
 ### Crear un paciente
-
 POST http://localhost:8000/patients/registerPatient HTTP/1.1
+Content-Type: application/json
 
 {
     "nombre": "Lucila",
@@ -47,3 +51,9 @@ POST http://localhost:8000/patients/registerPatient HTTP/1.1
     "email": "luciladayan@gmail.com",
     "phone": "1145545459"
 }
+
+### Devolver todos los pacientes
+GET http://localhost:8000/patients/allPacients
+
+### Devolver paciente especifico por ID
+GET http://localhost:8000/patients/pacient/2

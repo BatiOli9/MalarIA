@@ -16,10 +16,33 @@ const controller = {
 
         try {
             await client.query(query, [nombre, apellido, descripcion, id_pais, id_user, email, phone]);
-            res.json({ message: "Usuario registrado correctamente" });
+            res.json({ message: "Paciente registrado correctamente" });
         } catch (error) {
-            console.error('Error al registrar usuario:', error); // Imprime el error en la consola
-            res.status(500).json({ message: "Error al registrar usuario", error: error.message });
+            console.error('Error al registrar paciente:', error); // Imprime el error en la consola
+            res.status(500).json({ message: "Error al registrar paciente", error: error.message });
+        }
+    },
+    allPacients: async (req, res) => {
+        let query = 'SELECT * FROM public.pacientes';
+
+        try {
+            const result = await client.query(query);
+            res.json(result);
+        } catch (err) {
+            console.error('Error al requerir pacientes:', err); // Imprime el error en la consola
+            res.status(500).json({ message: "Error al requerir pacientes", err: err.message });
+        }
+    },
+    pacient: async (req, res) => {
+        const id = req.parms.id;
+        let query = "SELECT * FROM public.pacientes WHERE id = $1";
+
+        try {
+            const result = await client.query(query, [id]);
+            res.json(result);
+        } catch (err) {
+            console.error('Error al requerir paciente:', err); // Imprime el error en la consola
+            res.status(500).json({ message: "Error al requerir paciente", err: err.message });
         }
     }
 }

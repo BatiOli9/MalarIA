@@ -81,7 +81,7 @@ const controller = {
             id_ocupacion
         );
     
-        /* let query = 'UPDATE public.users SET nombre = $1, apellido = $2, username = $3, password = $4, email = $5, id_pais = $6, id_ocupacion = $7 WHERE id = $8';
+        let query = 'UPDATE public.users SET nombre = $1, apellido = $2, username = $3, password = $4, email = $5, id_pais = $6, id_ocupacion = $7 WHERE id = $8';
     
         try {
             await client.query(query, [nombre, apellido, username, password, email, id_pais, id_ocupacion, id]);
@@ -89,7 +89,20 @@ const controller = {
         } catch (err) {
             console.error('Error al editar usuario:', err); // Imprime el error en la consola
             res.status(500).json({ message: "Error al editar usuario", err: err.message });
-        } */
+        }
+    },
+    deleteUser: async (req, res) => {
+        const id = req.params.id;
+
+        const query = 'DELETE FROM public.users WHERE id = $1';
+
+        try {
+            await client.query(query, [id]);
+            res.send("Usuario Correctamente Eliminado");
+        } catch (err) {
+            console.error('Error al eliminar usuario:', err); // Imprime el error en la consola
+            res.status(500).json({ message: "Error al eliminar usuario", err: err.message });
+        }
     }
 }
 

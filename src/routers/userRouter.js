@@ -15,4 +15,7 @@ router.get("/user/:id", userController.userById);
 // Editar un usuario existente
 router.put("/editUser/:id", userController.editUser);
 
+// Eliminar un usuario especifico
+router.delete("/deleteUser/:id", userController.deleteUser);
+
 export default router;
