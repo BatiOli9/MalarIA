@@ -34,7 +34,7 @@ const controller = {
         }
     },
     pacient: async (req, res) => {
-        const id = req.parms.id;
+        const id = req.params.id;
         let query = "SELECT * FROM public.pacientes WHERE id = $1";
 
         try {
@@ -43,6 +43,35 @@ const controller = {
         } catch (err) {
             console.error('Error al requerir paciente:', err); // Imprime el error en la consola
             res.status(500).json({ message: "Error al requerir paciente", err: err.message });
+        }
+    },
+    editPacient: async (req, res) => {
+        const id = req.params.id;
+
+        const nombre = req.body.nombre;
+        const apellido = req.body.apellido;
+        const descripcion = req.body.descripcion;
+        const id_pais = req.body.pais;
+        const email = req.body.email;
+        const phone = req.body.phone;
+
+        console.log(
+            nombre,
+            apellido,
+            descripcion,
+            id_pais,
+            email,
+            phone
+        );
+
+        let query = 'UPDATE public.pacientes SET nombre = $1, apellido = $2, descripcion = $3, id_pais = $4, email = $5, phone = $6';
+
+        try {
+            await client.query(query, [nombre, apellido, descripcion, id_pais, email, phone]);
+            res.send("Paciente editado correctamente");
+        } catch (err) {
+            console.error('Error al editar paciente:', err); // Imprime el error en la consola
+            res.status(500).json({ message: "Error al editar paciente", err: err.message });
         }
     }
 }

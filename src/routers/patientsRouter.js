@@ -12,4 +12,7 @@ router.get("/allPacients", patientsController.allPacients);
 // Devolver paciente especifico
 router.get("/pacient/:id", patientsController.pacient);
 
+// Editar Paciente Existente
+router.put("/editPacient/:id", patientsController.editPacient);
+
 export default router;
