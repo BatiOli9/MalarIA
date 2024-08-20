@@ -73,7 +73,37 @@ const controller = {
             console.error('Error al editar paciente:', err); // Imprime el error en la consola
             res.status(500).json({ message: "Error al editar paciente", err: err.message });
         }
-    }
+    },
+    deletePacient: async (req, res) => {
+        const id = req.params.id;
+
+        const query = 'DELETE FROM public.pacientes WHERE id = $1';
+
+        try {
+            await client.query(query, [id]);
+            res.send("Paciente Eliminado Correctamente");
+        } catch (err) {
+            console.error('Error al eliminar paciente:', err); // Imprime el error en la consola
+            res.status(500).json({ message: "Error al eliminar paciente", err: err.message });
+        }
+    },
+    pacientsByUser: async (req, res) => {
+        const id = req.params.id;
+
+        const query = 'SELECT * FROM public.pacientes WHERE id_user = $1';
+
+        try {
+            const result = await client.query(query, [id]);
+            if (result.rows.length > 0) {
+                res.json(result.rows);
+            } else {
+                res.status(404).json({ message: "Usuario no encontrado" });
+            }
+        } catch (err) {
+            console.error('Error al requerir usuario:', err); // Imprime el error en la consola
+            res.status(500).json({ message: "Error al requerir usuario", err: err.message });
+        }
+    } 
 }
 
 export default controller;

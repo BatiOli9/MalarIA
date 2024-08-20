@@ -70,3 +70,9 @@ Content-Type: application/json
     "email": "luciladayan@gmail.com",
     "phone": "1145545459"
 }
+
+### Eliminar Usuario Existente
+DELETE http://localhost:8000/patients/deletePacient/5
+
+### Imprimir todos los pacientes de un usuario
+GET http://localhost:8000/patients/pacientsByUser/5

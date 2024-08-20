@@ -15,4 +15,10 @@ router.get("/pacient/:id", patientsController.pacient);
 // Editar Paciente Existente
 router.put("/editPacient/:id", patientsController.editPacient);
 
+// Eliminar Paciente Existente
+router.delete("/deletePacient/:id", patientsController.deletePacient);
+
+// Ver todos los pacientes de un usuario
+router.get("/pacientsByUser/:id", patientsController.pacientsByUser);
+
 export default router;
