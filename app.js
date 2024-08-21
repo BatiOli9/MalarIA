@@ -10,6 +10,7 @@ app.use(express.static("./public"));
 app.set("view engine", "ejs");
 
 // Capturar el body
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 import indexRouter from "./src/routers/indexRouter.js";

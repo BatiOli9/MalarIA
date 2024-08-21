@@ -11,6 +11,7 @@ const controller = {
         const password = req.body.password;
         const ocupacion = req.body.ocupacion;
         const pais = req.body.pais;
+        const creation = Date.now();
 
         const jerarquia = 1;
 
@@ -25,10 +26,10 @@ const controller = {
             jerarquia
         );
 
-        let query = 'INSERT INTO public.users (nombre, apellido, username, email, id_jerarquia, id_ocupacion, id_pais, password) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)';
+        let query = 'INSERT INTO public.users (nombre, apellido, username, email, id_jerarquia, id_ocupacion, id_pais, password, creation) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)';
 
         try {
-            await client.query(query, [nombre, apellido, username, email, jerarquia, ocupacion, pais, password]);
+            await client.query(query, [nombre, apellido, username, email, jerarquia, ocupacion, pais, password, creation]);
             res.json({ message: "Usuario registrado correctamente" });
         } catch (error) {
             console.error('Error al registrar usuario:', error); // Imprime el error en la consola

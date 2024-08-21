@@ -11,11 +11,12 @@ const controller = {
         const id_user = 5;
         const email = req.body.email;
         const phone = req.body.phone;
+        const fecha_nacimiento = req.body.nacimiento;
 
-        let query = 'INSERT INTO public.pacientes (nombre, apellido, descripcion, id_pais, id_user, email, phone) VALUES ($1, $2, $3, $4, $5, $6, $7)';
+        let query = 'INSERT INTO public.pacientes (nombre, apellido, descripcion, id_pais, id_user, email, phone, fecha_nacimiento) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)';
 
         try {
-            await client.query(query, [nombre, apellido, descripcion, id_pais, id_user, email, phone]);
+            await client.query(query, [nombre, apellido, descripcion, id_pais, id_user, email, phone, fecha_nacimiento]);
             res.json({ message: "Paciente registrado correctamente" });
         } catch (error) {
             console.error('Error al registrar paciente:', error); // Imprime el error en la consola
@@ -54,6 +55,7 @@ const controller = {
         const id_pais = req.body.pais;
         const email = req.body.email;
         const phone = req.body.phone;
+        const fecha_nacimiento = req.body.nacimiento;
 
         console.log(
             nombre,
@@ -64,10 +66,10 @@ const controller = {
             phone
         );
 
-        let query = 'UPDATE public.pacientes SET nombre = $1, apellido = $2, descripcion = $3, id_pais = $4, email = $5, phone = $6';
+        let query = 'UPDATE public.pacientes SET nombre = $1, apellido = $2, descripcion = $3, id_pais = $4, email = $5, phone = $6, fecha_nacimiento = $7 WHERE id = $8';
 
         try {
-            await client.query(query, [nombre, apellido, descripcion, id_pais, email, phone]);
+            await client.query(query, [nombre, apellido, descripcion, id_pais, email, phone, fecha_nacimiento, id]);
             res.send("Paciente editado correctamente");
         } catch (err) {
             console.error('Error al editar paciente:', err); // Imprime el error en la consola
