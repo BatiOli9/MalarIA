@@ -1,6 +1,10 @@
 import fs from "fs";
 import path from "path";
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 import { client } from "../dbconfig.js";
+
+const saltRounds = 10;
 
 const controller = {
     registerPost: async (req, res) => {
@@ -11,8 +15,7 @@ const controller = {
         const password = req.body.password;
         const ocupacion = req.body.ocupacion;
         const pais = req.body.pais;
-        const creation = Date.now();
-
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
         const jerarquia = 1;
 
         console.log(
@@ -26,10 +29,10 @@ const controller = {
             jerarquia
         );
 
-        let query = 'INSERT INTO public.users (nombre, apellido, username, email, id_jerarquia, id_ocupacion, id_pais, password, creation) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)';
+        let query = 'INSERT INTO public.users (nombre, apellido, username, email, id_jerarquia, id_ocupacion, id_pais, password) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)';
 
         try {
-            await client.query(query, [nombre, apellido, username, email, jerarquia, ocupacion, pais, password, creation]);
+            await client.query(query, [nombre, apellido, username, email, jerarquia, ocupacion, pais, hashedPassword]);
             res.json({ message: "Usuario registrado correctamente" });
         } catch (error) {
             console.error('Error al registrar usuario:', error); // Imprime el error en la consola
@@ -71,7 +74,9 @@ const controller = {
         const password = req.body.password;
         const id_pais = req.body.pais;
         const id_ocupacion = req.body.ocupacion;
-    
+
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
+
         console.log(
             nombre,
             apellido,
@@ -85,7 +90,7 @@ const controller = {
         let query = 'UPDATE public.users SET nombre = $1, apellido = $2, username = $3, password = $4, email = $5, id_pais = $6, id_ocupacion = $7 WHERE id = $8';
     
         try {
-            await client.query(query, [nombre, apellido, username, password, email, id_pais, id_ocupacion, id]);
+            await client.query(query, [nombre, apellido, username, hashedPassword, email, id_pais, id_ocupacion, id]);
             res.send("Usuario Editado Correctamente");
         } catch (err) {
             console.error('Error al editar usuario:', err); // Imprime el error en la consola
@@ -103,6 +108,34 @@ const controller = {
         } catch (err) {
             console.error('Error al eliminar usuario:', err); // Imprime el error en la consola
             res.status(500).json({ message: "Error al eliminar usuario", err: err.message });
+        }
+    },
+    login: async (req, res) => {
+        const { email, password } = req.body;
+
+        try {
+            const query = 'SELECT id, email, password FROM public.users WHERE email = $1';
+            const result = await client.query(query, [email]);
+
+            if (result.rows.length === 0) {
+                return res.status(401).json({ message: "Usuario no encontrado" });
+            }
+
+            const user = result.rows[0];
+            const isPasswordValid = await bcrypt.compare(password, user.password);
+
+            if (!isPasswordValid) {
+                return res.status(401).json({ message: "Contraseña incorrecta" });
+            }
+
+            const token = jwt.sign(
+                { id: user.id, email: user.email },
+                process.env.JWT_SECRET || "secret_key",
+                { expiresIn: "1h" }
+            );
+        } catch (err) {
+            console.error('Error al hacer login:', err); // Imprime el error en la consola
+            res.status(500).json({ message: "Error al hacer login", err: err.message });
         }
     }
 }

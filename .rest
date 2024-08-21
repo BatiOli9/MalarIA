@@ -37,6 +37,14 @@ Content-Type: application/json
 ### Eliminar Usuario Especifico
 DELETE http://localhost:8000/user/deleteUser/18
 
+### Login
+POST http://localhost:8000/user/login
+
+{
+    "email": "jazniew@gmail.com",
+    "password": "Jaz123"
+}
+
 ### Pacientes
 
 ### Crear un paciente

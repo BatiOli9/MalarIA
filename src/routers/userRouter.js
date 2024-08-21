@@ -18,4 +18,7 @@ router.put("/editUser/:id", userController.editUser);
 // Eliminar un usuario especifico
 router.delete("/deleteUser/:id", userController.deleteUser);
 
+// Login
+router.post("/login", userController.login);
+
 export default router;
