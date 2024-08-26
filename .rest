@@ -11,11 +11,11 @@ POST http://localhost:8000/user/register HTTP/1.1
 Content-Type: application/json
 
 {
-    "nombre": "Jazmin",
-    "apellido": "Niew",
-    "username": "JazNiew",
-    "email": "jazniew@gmail.com",
-    "password": "Jaz123",
+    "nombre": "Laila",
+    "apellido": "Dejtiar",
+    "username": "LailaDejtiar",
+    "email": "laila@malaria.com",
+    "password": "Laila123",
     "ocupacion": 1,
     "pais": 1
 }
@@ -35,14 +35,15 @@ Content-Type: application/json
 }
 
 ### Eliminar Usuario Especifico
-DELETE http://localhost:8000/user/deleteUser/18
+DELETE http://localhost:8000/user/deleteUser/11
 
 ### Login
 POST http://localhost:8000/user/login
+Content-Type: application/json
 
 {
-    "email": "jazniew@gmail.com",
-    "password": "Jaz123"
+    "email": "laila@malaria.com",
+    "password": "Laila123"
 }
 
 ### Pacientes
