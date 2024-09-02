@@ -41,6 +41,9 @@ const controller = {
             console.error('Error al requerir analisis:', err); // Imprime el error en la consola
             res.status(500).json({ message: "Error al requerir analisis", err: err.message });
         }
+    },
+    uploadAnalisis: async (req, res) => {
+        
     }
 }
 

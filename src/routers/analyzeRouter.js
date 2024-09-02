@@ -26,6 +26,8 @@ router.get("/todosAnalisis", analyzeController.todosAnalisis);
 router.get("/analisisPorPaciente/:id", analyzeController.analisisPorPaciente);
 // Devolver analisis por ID
 router.get("/analisisPorId", analyzeController.analisisPorId);
+// Subir Analisis
+router.post("/uploadAnalisis", analyzeController.uploadAnalisis);
 
 const upload = multer({ storage: storage });
 
