@@ -3,6 +3,7 @@ import path from "path";
 import { client } from "../dbconfig.js";
 import { dirname, join, extname } from 'path';
 import { fileURLToPath } from 'url';
+import { upload } from "../upload.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -42,8 +43,11 @@ const controller = {
             res.status(500).json({ message: "Error al requerir analisis", err: err.message });
         }
     },
-    uploadAnalisis: async (req, res) => {
-        
+    uploadAnalyze: async (req, res) => {
+        res.render('upload');
+    },
+    uploadAnalyzePost: async (req, res) => {
+        const 
     }
 }
 

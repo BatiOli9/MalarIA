@@ -20,15 +20,29 @@ const storage = multer.diskStorage({
     }
 });
 
+const fileFilter = (req, file, cb) => {
+    const allowedTypes = ['application/pdf', 'image/png', 'image/jpeg', 'image/jpg'];
+    if (allowedTypes.includes(file.mimetype)) {
+        cb(null, true);
+    } else {
+        cb(new Error('Invalid file type. Only PDF, PNG, JPEG, and JPG files are allowed.'), false);
+    }
+};
+
+const upload = multer({ 
+    storage: storage,
+    fileFilter: fileFilter
+});
+
 // Devolver todos los analisis
 router.get("/todosAnalisis", analyzeController.todosAnalisis);
 // Devolver analisis por paciente
 router.get("/analisisPorPaciente/:id", analyzeController.analisisPorPaciente);
 // Devolver analisis por ID
 router.get("/analisisPorId", analyzeController.analisisPorId);
-// Subir Analisis
-router.post("/uploadAnalisis", analyzeController.uploadAnalisis);
-
-const upload = multer({ storage: storage });
+// Subir Analisis (vista)
+router.get("/uploadAnalyze", analyzeController.uploadAnalyze);
+// Subir Analisis proceso
+router.post("/uploadAnalyzePost", upload.single('file'), analyzeController.uploadAnalyze);
 
 export default router;
