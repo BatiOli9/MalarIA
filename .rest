@@ -85,3 +85,9 @@ DELETE http://localhost:8000/patients/deletePacient/5
 
 ### Imprimir todos los pacientes de un usuario
 GET http://localhost:8000/patients/pacientsByUser/5
+
+### Analisis
+
+### Visualizar todos los analisis
+GET http://localhost:8000/analyze/todosAnalisis
+
