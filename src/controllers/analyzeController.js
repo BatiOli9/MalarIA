@@ -51,36 +51,35 @@ const controller = {
         const fecha = Date.now();
         const id_paciente = 3;
         
-        const extension = file_name.split('.').pop();
+        const extension = imageFile.split('.').pop();
         
         const extensionesPermitidas = ['pdf', 'png', 'jpeg', 'jpg'];
-
+    
         if (!extensionesPermitidas.includes(extension)) {
             console.error('Extensión de archivo no permitida');
-            return res.status(400).send('Error: Extensión de archivo no permitida. Extensiones admitidas: DOC, DOCX, XLSX, PPT, PPTX y PDF');
+            return res.status(400).send('Error: Extensión de archivo no permitida. Extensiones admitidas: PDF, PNG, JPEG, y JPG');
         }
-
+    
         console.log(
             'Nombre:', nombre,
             'Fecha:', fecha,
             'Id Paciente:', id_paciente,
-            'Imagen:', image
+            'Imagen:', imageFile
         );
         
-        const imageLocation = "../../uploads/" + imageFile;
-
+        const imageLocation = "../uploads/" + imageFile;
+    
         console.log(imageLocation);
-
-        /* const query = 'INSERT INTO public.analisis (imagen, nombre, fecha, id_paciente) VALUES ($1, $2, $3, $4)';
-
+    
+        const query = 'INSERT INTO public.analisis (imagen, nombre, fecha, id_paciente) VALUES ($1, $2, $3, $4)';
+    
         try {
-            upload.uploader.upload()
-            await client.query(query, [image, nombre, fecha, id_paciente]);
+            await client.query(query, [imageFile, nombre, fecha, id_paciente]);
             res.json({ message: "Analisis subido correctamente" });
         } catch (error) {
             console.error('Error al subir analisis:', error); // Imprime el error en la consola
             res.status(500).json({ message: "Error al subir analisis", error: error.message });
-        } */
+        }
     }
 }
 

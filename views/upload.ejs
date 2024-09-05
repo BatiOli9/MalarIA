@@ -7,9 +7,9 @@
 </head>
 <body>
     <h1>Crear Analisis</h1>
-    <form action="/analyze/uploadAnalyze">
+    <form action="/analyze/uploadAnalyzePost" method="post" enctype="multipart/form-data">
         <input type="text" name="nombre">
-        <input type="file" accept=".pdf, .png, .jpeg, .jpg">
+        <input type="file" name="file" accept=".pdf, .png, .jpeg, .jpg">
         <button type="submit">Crear Analisis</button>
     </form>
 </body>

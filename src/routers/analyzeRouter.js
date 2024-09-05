@@ -12,10 +12,10 @@ const __dirname = dirname(__filename);
 const uploadDir = join(__dirname, "../uploads");
 
 const storage = multer.diskStorage({
-    destination: function (req, res, cb) {
+    destination: function (req, file, cb) {
         cb(null, uploadDir);
     },
-    filename: function (req, res, cb) {
+    filename: function (req, file, cb) {
         cb(null, `${Date.now()}-${file.originalname}`)
     }
 });
@@ -43,6 +43,6 @@ router.get("/analisisPorId", analyzeController.analisisPorId);
 // Subir Analisis (vista)
 router.get("/uploadAnalyze", analyzeController.uploadAnalyze);
 // Subir Analisis proceso
-router.post("/uploadAnalyzePost", upload.single('file'), analyzeController.uploadAnalyze);
+router.post("/uploadAnalyzePost", upload.single('file'), analyzeController.uploadAnalyzePost);
 
 export default router;
