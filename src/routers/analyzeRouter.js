@@ -1,7 +1,9 @@
 import express from "express";
 import multer from 'multer';
 import { fileURLToPath } from 'url';
-import { dirname, join, extname } from 'path';
+import { dirname, join } from 'path';
+import fs from 'fs';
+
 const router = express.Router();
 
 import analyzeController from "../controllers/analyzeController.js";
@@ -10,6 +12,11 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const uploadDir = join(__dirname, "../uploads");
+
+// Verificar si la carpeta existe, si no, crearla
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+}
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {

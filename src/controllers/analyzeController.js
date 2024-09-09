@@ -50,6 +50,7 @@ const controller = {
         const nombre = req.body.nombre;
         const fecha = Date.now();
         const id_paciente = 3;
+        const resultados = 1;
         
         const extension = imageFile.split('.').pop();
         
@@ -71,10 +72,10 @@ const controller = {
     
         console.log(imageLocation);
     
-        const query = 'INSERT INTO public.analisis (imagen, nombre, fecha, id_paciente) VALUES ($1, $2, $3, $4)';
+        const query = 'INSERT INTO public.analisis (imagen, nombre, fecha, id_paciente, resultados) VALUES ($1, $2, $3, $4, $5)';
     
         try {
-            await client.query(query, [imageFile, nombre, fecha, id_paciente]);
+            await client.query(query, [imageFile, nombre, fecha, id_paciente, resultados]);
             res.json({ message: "Analisis subido correctamente" });
         } catch (error) {
             console.error('Error al subir analisis:', error); // Imprime el error en la consola
