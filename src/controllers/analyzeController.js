@@ -73,7 +73,7 @@ const controller = {
         console.log(imageLocation);
     
         const query = 'INSERT INTO public.analisis (imagen, nombre, fecha, id_paciente, resultados) VALUES ($1, $2, $3, $4, $5)';
-    
+        
         try {
             await client.query(query, [imageFile, nombre, fecha, id_paciente, resultados]);
             res.json({ message: "Analisis subido correctamente" });
