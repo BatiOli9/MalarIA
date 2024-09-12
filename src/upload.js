@@ -1,7 +1,12 @@
 import { v2 as cloudinary } from 'cloudinary';
+import dotenv from 'dotenv';
 
-export const upload = cloudinary.config({
-    cloud_name: "dkalwayyj",
-    api_key: "171947958839266",
-    api_secret: "eKwOVsZSZ8d3BWPCn3MYqMoHNKQ",
+dotenv.config();
+
+cloudinary.config({
+  cloud_name: "dkalwayyj",
+  api_key: "446337119928959",
+  api_secret: "Z5a5ZOtU3zUV3xqUq80AA77mA0U"
 });
+
+export default cloudinary;

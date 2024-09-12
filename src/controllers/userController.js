@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { client } from "../dbconfig.js";
 

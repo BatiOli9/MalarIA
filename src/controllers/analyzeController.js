@@ -1,9 +1,9 @@
 import fs from "fs";
 import path from "path";
 import { client } from "../dbconfig.js";
-import { dirname, join, extname } from 'path';
+import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
-import { upload } from "../upload.js";
+import cloudinary from '../upload.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -16,7 +16,7 @@ const controller = {
             const result = await client.query(query);
             res.json(result);
         } catch (err) {
-            console.error('Error al requerir analisis:', err); // Imprime el error en la consola
+            console.error('Error al requerir analisis:', err);
             res.status(500).json({ message: "Error al requerir analisis", err: err.message });
         }
     },
@@ -27,7 +27,7 @@ const controller = {
             const result = await client.query(query, [id]);
             res.json(result);
         } catch (err) {
-            console.error('Error al requerir analisis:', err); // Imprime el error en la consola
+            console.error('Error al requerir analisis:', err);
             res.status(500).json({ message: "Error al requerir analisis", err: err.message });
         }
     },
@@ -38,7 +38,7 @@ const controller = {
             const result = await client.query(query, [id]);
             res.json(result);
         } catch (err) {
-            console.error('Error al requerir analisis:', err); // Imprime el error en la consola
+            console.error('Error al requerir analisis:', err);
             res.status(500).json({ message: "Error al requerir analisis", err: err.message });
         }
     },
@@ -46,40 +46,36 @@ const controller = {
         res.render('upload');
     },
     uploadAnalyzePost: async (req, res) => {
-        const imageFile = req.file.filename;
+        const imageFile = req.file.path;
         const nombre = req.body.nombre;
         const fecha = Date.now();
         const id_paciente = 3;
         const resultados = 1;
-        
+
         const extension = imageFile.split('.').pop();
-        
         const extensionesPermitidas = ['pdf', 'png', 'jpeg', 'jpg'];
-    
+
         if (!extensionesPermitidas.includes(extension)) {
             console.error('Extensión de archivo no permitida');
             return res.status(400).send('Error: Extensión de archivo no permitida. Extensiones admitidas: PDF, PNG, JPEG, y JPG');
         }
-    
-        console.log(
-            'Nombre:', nombre,
-            'Fecha:', fecha,
-            'Id Paciente:', id_paciente,
-            'Imagen:', imageFile
-        );
-        
-        const imageLocation = "../uploads/" + imageFile;
-    
-        console.log(imageLocation);
-    
-        const query = 'INSERT INTO public.analisis (imagen, nombre, fecha, id_paciente, resultados) VALUES ($1, $2, $3, $4, $5)';
-        
+
+        // Subir la imagen a Cloudinary
         try {
-            await client.query(query, [imageFile, nombre, fecha, id_paciente, resultados]);
-            res.json({ message: "Analisis subido correctamente" });
+            const result = await cloudinary.uploader.upload(imageFile, {
+                folder: 'analisis',
+            });
+
+            const imageUrl = result.secure_url; // Obtener el link de la imagen subida
+
+            // Insertar el análisis en la base de datos, incluyendo el URL de la imagen
+            const query = 'INSERT INTO public.analisis (imagen, nombre, fecha, id_paciente, resultados) VALUES ($1, $2, $3, $4, $5)';
+            await client.query(query, [imageUrl, nombre, fecha, id_paciente, resultados]);
+
+            res.json({ message: "Análisis subido correctamente", imageUrl });
         } catch (error) {
-            console.error('Error al subir analisis:', error); // Imprime el error en la consola
-            res.status(500).json({ message: "Error al subir analisis", error: error.message });
+            console.error('Error al subir análisis:', error);
+            res.status(500).json({ message: "Error al subir análisis", error: error.message });
         }
     }
 }
