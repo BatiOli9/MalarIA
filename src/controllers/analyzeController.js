@@ -4,6 +4,7 @@ import { client } from "../dbconfig.js";
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import cloudinary from '../upload.js';
+/* import authMiddleware from '../middlewares/auth.js'; */
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -51,6 +52,8 @@ const controller = {
         const fecha = Date.now();
         const id_paciente = 3;
         const resultados = 1;
+        /* const id_usuario = req.userId; */
+        const id_usuario = 10;
 
         const extension = imageFile.split('.').pop();
         const extensionesPermitidas = ['pdf', 'png', 'jpeg', 'jpg'];
@@ -72,10 +75,29 @@ const controller = {
             const query = 'INSERT INTO public.analisis (imagen, nombre, fecha, id_paciente, resultados) VALUES ($1, $2, $3, $4, $5)';
             await client.query(query, [imageUrl, nombre, fecha, id_paciente, resultados]);
 
+            const query2 = 'SELECT id FROM public.analisis WHERE imagen = $1';
+            const result2 = await client.query(query2, [imageUrl]);
+
+            const id_requerido = result2.rows[0].id;
+
+            const query3 = 'INSERT INTO public.manipulacion (id_analisis, id_usuarios) VALUES ($1, $2)';
+            await client.query(query3, [id_requerido, id_usuario]);
+
             res.json({ message: "Análisis subido correctamente", imageUrl });
         } catch (error) {
             console.error('Error al subir análisis:', error);
             res.status(500).json({ message: "Error al subir análisis", error: error.message });
+        }
+    },
+    eliminarAnalisis: async (req, res) => {
+        const id = req.params.id;
+        const query = 'DELETE FROM public.analisis WHERE id = $1';
+        try {
+            await client.query(query, [id]);
+            res.json({ message: "Análisis eliminado correctamente" });
+        } catch (error) {
+            console.error('Error al eliminar análisis:', error);
+            res.status(500).json({ message: "Error al eliminar análisis", error: error.message });
         }
     }
 }

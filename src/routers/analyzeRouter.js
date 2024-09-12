@@ -51,5 +51,7 @@ router.get("/analisisPorId", analyzeController.analisisPorId);
 router.get("/uploadAnalyze", analyzeController.uploadAnalyze);
 // Subir Analisis proceso
 router.post("/uploadAnalyzePost", upload.single('file'), analyzeController.uploadAnalyzePost);
+// Eliminar Analisis Especifico
+router.delete("/eliminarAnalisis/:id", analyzeController.eliminarAnalisis);
 
 export default router;
