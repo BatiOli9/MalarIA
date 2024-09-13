@@ -9,7 +9,9 @@ export const client = new Client({
     user: "default",
     password: "laJDH9yGOwR6",
     port: 5432,
-    ssl: true
+    ssl: true,
+    idle_in_transaction_session_timeout: 0,
+    connectionTimeoutMillis: 0
 });
 
 client.connect();

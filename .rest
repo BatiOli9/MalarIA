@@ -91,3 +91,6 @@ GET http://localhost:8000/patients/pacientsByUser/5
 ### Visualizar todos los analisis
 GET http://localhost:8000/analyze/todosAnalisis
 
+### Borrar analisis por ID
+
+DELETE http://localhost:8000/analyze/deleteAnalyze/8

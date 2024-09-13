@@ -83,14 +83,17 @@ const controller = {
             const query3 = 'INSERT INTO public.manipulacion (id_analisis, id_usuarios) VALUES ($1, $2)';
             await client.query(query3, [id_requerido, id_usuario]);
 
+            fs.unlinkSync(imageFile); // Eliminar el archivo local
+
             res.json({ message: "Análisis subido correctamente", imageUrl });
         } catch (error) {
             console.error('Error al subir análisis:', error);
             res.status(500).json({ message: "Error al subir análisis", error: error.message });
         }
     },
-    eliminarAnalisis: async (req, res) => {
+    deleteAnalyze: async (req, res) => {
         const id = req.params.id;
+
         const query = 'DELETE FROM public.analisis WHERE id = $1';
         try {
             await client.query(query, [id]);

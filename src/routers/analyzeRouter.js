@@ -43,15 +43,19 @@ const upload = multer({
 
 // Devolver todos los analisis
 router.get("/todosAnalisis", analyzeController.todosAnalisis);
+
 // Devolver analisis por paciente
 router.get("/analisisPorPaciente/:id", analyzeController.analisisPorPaciente);
+
 // Devolver analisis por ID
 router.get("/analisisPorId", analyzeController.analisisPorId);
+
 // Subir Analisis (vista)
 router.get("/uploadAnalyze", analyzeController.uploadAnalyze);
 // Subir Analisis proceso
 router.post("/uploadAnalyzePost", upload.single('file'), analyzeController.uploadAnalyzePost);
+
 // Eliminar Analisis Especifico
-router.delete("/eliminarAnalisis/:id", analyzeController.eliminarAnalisis);
+router.delete("/deleteAnalyze/:id", analyzeController.deleteAnalyze);
 
 export default router;
