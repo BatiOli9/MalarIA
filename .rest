@@ -92,5 +92,12 @@ GET http://localhost:8000/patients/pacientsByUser/5
 GET http://localhost:8000/analyze/todosAnalisis
 
 ### Borrar analisis por ID
-
 DELETE http://localhost:8000/analyze/deleteAnalyze/8
+
+### Editar Analisis
+PUT http://localhost:8000/analyze/editAnalyze/7 HTTP/1.1
+Content-Type: application/json
+
+{
+    "nombre": "Edited"
+}

@@ -58,4 +58,10 @@ router.post("/uploadAnalyzePost", upload.single('file'), analyzeController.uploa
 // Eliminar Analisis Especifico
 router.delete("/deleteAnalyze/:id", analyzeController.deleteAnalyze);
 
+// Editar Analisis
+router.put("/editAnalyze/:id", analyzeController.editAnalyze);
+
+// Agregar Colbadoradores al analisis
+router.put("/addCollaborators/:id", analyzeController.addCollaborators);
+
 export default router;
