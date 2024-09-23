@@ -3,6 +3,7 @@ import path from "path";
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { client } from "../dbconfig.js";
+import "dotenv/config";
 
 const saltRounds = 10;
 
@@ -156,8 +157,8 @@ const controller = {
             }
     
             const token = jwt.sign(
-                { id: user.id, email: user.email },
-                process.env.JWT_SECRET || "secret_key",
+                { userId: user.id, email: user.email },
+                process.env.JWT_SECRET,
                 { expiresIn: "1h" }
             );
     
