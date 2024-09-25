@@ -3,7 +3,7 @@ import multer from 'multer';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import fs from 'fs';
-import { verifyToken } from "../middlewares/auth.js";
+import { verifyToken, verifyAdmin } from "../middlewares/auth.js";
 
 const router = express.Router();
 
@@ -49,7 +49,7 @@ router.get("/analisisPorId", analyzeController.analisisPorId);
 // Subir Analisis (vista)
 router.get("/uploadAnalyze", analyzeController.uploadAnalyze);
 // Subir Analisis proceso
-router.post("/uploadAnalyzePost", upload.single('file'), analyzeController.uploadAnalyzePost);
+router.post("/uploadAnalyzePost", upload.single('file'), verifyToken, analyzeController.uploadAnalyzePost);                                                                                                 
 
 // Eliminar Analisis Especifico
 router.delete("/deleteAnalyze/:id", analyzeController.deleteAnalyze);

@@ -141,6 +141,7 @@ const controller = {
         try {
             const query = 'SELECT id, email, password FROM public.users WHERE email = $1';
             const result = await client.query(query, [email]);
+            const secret = "HolaMundo";
     
             if (result.rows.length === 0) {
                 return res.status(401).json({ message: "Usuario no encontrado" });
@@ -158,7 +159,7 @@ const controller = {
     
             const token = jwt.sign(
                 { userId: user.id, email: user.email },
-                process.env.JWT_SECRET,
+                secret,
                 { expiresIn: "1h" }
             );
     

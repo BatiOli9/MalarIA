@@ -51,6 +51,7 @@ Content-Type: application/json
 ### Crear un paciente
 POST http://localhost:8000/patients/registerPatient HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIyLCJlbWFpbCI6ImxhaWxhQG1hbGFyaWEuY29tIiwiaWF0IjoxNzI3MjIzMjc3LCJleHAiOjE3MjcyMjY4Nzd9.GFXKkmQ4JOWy9vLTNWcavxtyWrKwonHidyyGwxJ-Dwk
 
 {
     "nombre": "Lucila",

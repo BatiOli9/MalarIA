@@ -5,11 +5,14 @@ import { client } from "../dbconfig.js";
 export const verifyToken = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
+
+    const secret = "HolaMundo";
+
     if (!authHeader) {
       return res.status(401).json({ message: 'Falta proveer el Token' });
     }
 
-    if (!authHeader.startsWith("Bearer ")){
+    if (!authHeader.startsWith('Bearer ')){
       return res.status(401).json({ message: 'Formato Invalido' });
     }
 
@@ -19,13 +22,15 @@ export const verifyToken = async (req, res, next) => {
       return res.status(401).json({ message: 'Formato de Token Invalido' });
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, secret);
 
-    if (!decoded || !decoded.id) {
+    console.log(decoded.userId);
+
+    if (!decoded || !decoded.userId) {
       return res.status(401).json({ message: 'Token Invalido' });
     }
 
-    req.userId = decoded.id;
+    req.userId = decoded.userId;
     next();
   } catch (error) {
     return res.status(401).json({ message: 'Unauthorized', error: error.message });
