@@ -11,13 +11,28 @@ POST http://localhost:8000/user/register HTTP/1.1
 Content-Type: application/json
 
 {
-    "nombre": "Laila",
-    "apellido": "Dejtiar",
-    "username": "LailaDejtiar",
-    "email": "laila@malaria.com",
-    "password": "Laila123",
+    "nombre": "Matias",
+    "apellido": "Niebieski",
+    "username": "TuteNieb",
+    "email": "tute@gmail.com",
+    "password": "Tute123",
     "ocupacion": 1,
     "pais": 1
+}
+
+### Agregar Usuarios Admin
+POST http://localhost:8000/user/registerAdmin HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIzLCJlbWFpbCI6InR1dGVAZ21haWwuY29tIiwiaWF0IjoxNzI3MjY0NDQ5LCJleHAiOjE3MjcyNjgwNDl9.GmyUuaCP4pDEb9szmqCi0DHSbxmxkOiAQHl-j4Qx0Jk
+
+{
+   "nombre": "Oliver",
+    "apellido": "Safdieh",
+    "username": "OliverSafdiehADM2",
+    "email": "oliver2@malaria.com",
+    "password": "Oliver123",
+    "ocupacion": 1,
+    "pais": 1 
 }
 
 ### Editar Usuario Especifico
@@ -42,8 +57,8 @@ POST http://localhost:8000/user/login
 Content-Type: application/json
 
 {
-    "email": "laila@malaria.com",
-    "password": "Laila123"
+    "email": "tute@gmail.com",
+    "password": "Tute123"
 }
 
 ### Pacientes
@@ -51,19 +66,20 @@ Content-Type: application/json
 ### Crear un paciente
 POST http://localhost:8000/patients/registerPatient HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIyLCJlbWFpbCI6ImxhaWxhQG1hbGFyaWEuY29tIiwiaWF0IjoxNzI3MjIzMjc3LCJleHAiOjE3MjcyMjY4Nzd9.GFXKkmQ4JOWy9vLTNWcavxtyWrKwonHidyyGwxJ-Dwk
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIyLCJlbWFpbCI6ImxhaWxhQG1hbGFyaWEuY29tIiwiaWF0IjoxNzI3MjY0MDA1LCJleHAiOjE3MjcyNjc2MDV9.5hCQeqiCwOKaISUYyYM7GZXUhyJfyLG3k__sjoB7RUc
 
 {
-    "nombre": "Lucila",
-    "apellido": "Dayan",
-    "descripcion": "Le pico un mosquito mientras grababa un TikTok en el campo",
+    "nombre": "Julian",
+    "apellido": "Rozen",
+    "descripcion": "Tina tenia un mosquito infectado y se lo contagio",
     "pais": 1,
-    "email": "luciladayan@gmail.com",
+    "email": "julitorozen@gmail.com",
     "phone": "1145545459"
 }
 
 ### Devolver todos los pacientes
 GET http://localhost:8000/patients/allPacients
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIyLCJlbWFpbCI6ImxhaWxhQG1hbGFyaWEuY29tIiwiaWF0IjoxNzI3MjY0MDA1LCJleHAiOjE3MjcyNjc2MDV9.5hCQeqiCwOKaISUYyYM7GZXUhyJfyLG3k__sjoB7RUc
 
 ### Devolver paciente especifico por ID
 GET http://localhost:8000/patients/pacient/2

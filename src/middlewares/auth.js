@@ -48,7 +48,7 @@ export const verifyAdmin = async (req, res, next) => {
       console.log("No se han encontrado usuarios con ese ID");
     }
 
-    if (!user.admin) {
+    if (user.id_jerarquia === 2) {
       console.log("El usuario no esta autorizado a realizar eso");
     }
 

@@ -17,6 +17,50 @@ const controller = {
         const ocupacion = req.body.ocupacion;
         const pais = req.body.pais;
         const hashedPassword = await bcrypt.hash(password, saltRounds);
+        const jerarquia = 2;
+
+        console.log(
+            nombre,
+            apellido,
+            password,
+            username,
+            email,
+            ocupacion,
+            pais,
+            jerarquia
+        );
+
+        let checkQuery = 'SELECT * FROM public.users WHERE email = $1 OR username = $2';
+        try {
+            const checkResult = await client.query(checkQuery, [email, username]);
+            if (checkResult.rows.length > 0) {
+            console.error('Error: El email o el username ya existen');
+            return res.status(400).json({ message: "El email o el username ya existen" });
+        }
+        } catch (error) {
+            console.error('Error al verificar email o username:', error);
+            return res.status(500).json({ message: "Error al verificar email o username", error: error.message });
+        }
+
+        let query = 'INSERT INTO public.users (nombre, apellido, username, email, id_jerarquia, id_ocupacion, id_pais, password) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)';
+
+        try {
+            await client.query(query, [nombre, apellido, username, email, jerarquia, ocupacion, pais, hashedPassword]);
+            res.json({ message: "Usuario registrado correctamente" });
+        } catch (error) {
+            console.error('Error al registrar usuario:', error); // Imprime el error en la consola
+            res.status(500).json({ message: "Error al registrar usuario", error: error.message });
+        }
+    },
+    registerAdminPost: async (req, res) => {
+        const nombre = req.body.nombre;
+        const apellido = req.body.apellido;
+        const username = req.body.username;
+        const email = req.body.email;
+        const password = req.body.password;
+        const ocupacion = req.body.ocupacion;
+        const pais = req.body.pais;
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
         const jerarquia = 1;
 
         console.log(
