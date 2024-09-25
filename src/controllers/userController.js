@@ -16,9 +16,7 @@ const controller = {
         const password = req.body.password;
         const ocupacion = req.body.ocupacion;
         const pais = req.body.pais;
-        const hashedPassword = await bcrypt.hash(password, saltRounds);
         const jerarquia = 2;
-
         console.log(
             nombre,
             apellido,
@@ -29,6 +27,9 @@ const controller = {
             pais,
             jerarquia
         );
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
+        
+
 
         let checkQuery = 'SELECT * FROM public.users WHERE email = $1 OR username = $2';
         try {
