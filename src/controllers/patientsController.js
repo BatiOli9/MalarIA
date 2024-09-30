@@ -1,6 +1,9 @@
 import fs from "fs";
 import path from "path";
 import { client } from "../dbconfig.js";
+import cors from "cors"
+
+app.use(cors());
 
 const controller = {
     registerPatient: async (req, res) => {

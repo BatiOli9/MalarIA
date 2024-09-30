@@ -1,9 +1,12 @@
-import fs from "fs";
+import fs, { appendFile } from "fs";
 import path from "path";
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { client } from "../dbconfig.js";
 import "dotenv/config";
+import cors from "cors"
+
+app.use(cors());
 
 const saltRounds = 10;
 
