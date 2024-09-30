@@ -4,7 +4,6 @@ import { client } from "../dbconfig.js";
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import cloudinary from '../upload.js';
-/* import authMiddleware from '../middlewares/auth.js'; */
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -52,8 +51,9 @@ const controller = {
         const fecha = Date.now();
         const id_paciente = 3;
         const resultados = 1;
-        /* const id_usuario = req.userId; */
-        const id_usuario = 10;
+        const id_usuario = req.userId;
+
+        console.log(id_usuario);
 
         const extension = imageFile.split('.').pop();
         const extensionesPermitidas = ['pdf', 'png', 'jpeg', 'jpg'];

@@ -3,7 +3,7 @@ import multer from 'multer';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import fs from 'fs';
-import { verifyToken } from "../middlewares/auth.js";
+import { verifyToken, verifyAdmin } from "../middlewares/auth.js";
 
 const router = express.Router();
 
@@ -38,26 +38,26 @@ const upload = multer({
 });
 
 // Devolver todos los analisis
-router.get("/todosAnalisis", analyzeController.todosAnalisis);
+router.get("/todosAnalisis", verifyAdmin, verifyToken, analyzeController.todosAnalisis);
 
 // Devolver analisis por paciente
-router.get("/analisisPorPaciente/:id", analyzeController.analisisPorPaciente);
+router.get("/analisisPorPaciente/:id", verifyToken, analyzeController.analisisPorPaciente);
 
 // Devolver analisis por ID
-router.get("/analisisPorId", analyzeController.analisisPorId);
+router.get("/analisisPorId", verifyToken, analyzeController.analisisPorId);
 
 // Subir Analisis (vista)
 router.get("/uploadAnalyze", analyzeController.uploadAnalyze);
 // Subir Analisis proceso
-router.post("/uploadAnalyzePost", upload.single('file'), analyzeController.uploadAnalyzePost);
+router.post("/uploadAnalyzePost", upload.single('file'), verifyToken, analyzeController.uploadAnalyzePost);                                                                                                 
 
 // Eliminar Analisis Especifico
-router.delete("/deleteAnalyze/:id", analyzeController.deleteAnalyze);
+router.delete("/deleteAnalyze/:id", verifyToken, analyzeController.deleteAnalyze);
 
 // Editar Analisis
-router.put("/editAnalyze/:id", analyzeController.editAnalyze);
+router.put("/editAnalyze/:id", verifyToken, analyzeController.editAnalyze);
 
 // Agregar Colbadoradores al analisis
-router.put("/addCollaborators/:id", analyzeController.addCollaborators);
+router.put("/addCollaborators/:id", verifyToken, analyzeController.addCollaborators);
 
 export default router;

@@ -17,6 +17,7 @@ import indexRouter from "./src/routers/indexRouter.js";
 import userRouter from "./src/routers/userRouter.js";
 import analyzeRouter from "./src/routers/analyzeRouter.js";
 import patientsRouter from "./src/routers/patientsRouter.js";
+import comunnityRouter from "./src/routers/comunnityRouter.js";
 
 // Configuramos las rutas index
 app.use("/", indexRouter);
@@ -29,6 +30,9 @@ app.use("/analyze", analyzeRouter);
 
 // Configuramos las rutas de pacientes
 app.use("/patients", patientsRouter);
+
+// Configuramos las rutas de la comunidad
+app.use("/community", comunnityRouter);
 
 // Configurar ERR 404
 app.use((req, res, next) => {
