@@ -50,6 +50,33 @@ const controller = {
                 return res.status(400).send("Error al crear publicacion")
             }
         }
+    },
+    allPosts: async (req, res) => {
+        const query = 'SELECT * FROM public.posts';
+        try {
+            const posts = await client.query(query);
+            return res.status(200).send(posts);
+        } catch (err) {
+            return res.status(400).send("Error al cargar publicaciones");
+        }
+    },
+    postById: async (req, res) => {
+        const id = req.params.id;
+        const query = 'SELECT * FROM public.posts WHERE id = $1';
+
+        try {
+            const post = await client.query(query, [id]);
+            return res.status(200).send(post);
+        } catch (err) {
+            return res.status(400).send("Error al cargar publicacion");
+        }
+    },
+    editPost: async (req, res) => {
+        const title = req.body.title;
+        const text = req.body.text;
+        const file = req.file.path;
+
+        
     }
 }
 
