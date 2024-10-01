@@ -1,5 +1,6 @@
 import express from "express"
 import path from "path"
+import cors from "cors"
 
 const app = express();
 // Definir puerto
@@ -8,6 +9,11 @@ const PORT = 8000;
 // Configurar carpeta publica
 app.use(express.static("./public"));
 app.set("view engine", "ejs");
+
+app.use(cors({
+    origin: "*",
+    methods: ["GET", "POST", "OPTIONS"]
+}));
 
 // Capturar el body
 app.use(express.urlencoded({ extended: true }));
