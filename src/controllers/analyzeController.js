@@ -5,10 +5,6 @@ import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import cloudinary from '../upload.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const uploadDir = path.join(__dirname, '../../uploads');
-
 const controller = {
     todosAnalisis: async (req, res) => {
         const query = "SELECT * FROM public.analisis";

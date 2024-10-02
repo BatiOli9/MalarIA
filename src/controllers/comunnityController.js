@@ -5,15 +5,11 @@ import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import cloudinary from '../upload.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const uploadDir = path.join(__dirname, '../../uploads');
-
 const controller = {
     createPost: async (req, res) => {
         const title = req.body.title;
         const text = req.body.text;
-        const file = req.file.path;
+        const file = req.file ? req.file.path : null;
         const id_user = req.userId;
 
         if (!title || !text) {
@@ -72,7 +68,7 @@ const controller = {
         const id = req.params.id;
         const title = req.body.title;
         const text = req.body.text;
-        const file = req.file.path;
+        const file = req.file ? req.file.path : null;
 
         if (!title || !text) {
             return res.status(500).send("Es necesario titulo y text para editar una publicacion");
