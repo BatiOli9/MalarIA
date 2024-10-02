@@ -5,30 +5,40 @@ import { dirname, join } from "path";
 import fs from "fs";
 import { verifyAdmin, verifyToken } from "../middlewares/auth.js";
 
-const router = express.Router();
-
 import communityController from "../controllers/comunnityController.js";
+
+const router = express.Router();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const uploadDir = join(__dirname, "../uploads");
+const uploadDir = join(__dirname, "../uploads/community");
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, uploadDir);
     },
     filename: function (req, file, cb) {
-        cb(null, `${Date.now()}-${file.originalname}`);
-    },
+        cb(null, `${Date.now()}-${file.originalname}`)
+    }
 });
+
+const fileFilter = (req, file, cb) => {
+    const allowedTypes = ['application/pdf', 'image/png', 'image/jpeg', 'image/jpg'];
+    if (allowedTypes.includes(file.mimetype)) {
+        cb(null, true);
+    } else {
+        cb(new Error('Invalid file type. Only PDF, PNG, JPEG, and JPG files are allowed.'), false);
+    }
+};
 
 const upload = multer({ 
-    storage: storage
-});
+    storage: storage,
+    fileFilter: fileFilter
+})
 
 // Crear publicacion
-router.post("/createPost", verifyToken, upload.single("file"), communityController.createPost);
+router.post("/createPost", upload.single("file"), verifyToken, communityController.createPost);
 
 // Devolver todas las publicaciones
 router.get("/allPosts", verifyToken, communityController.allPosts);
@@ -55,3 +65,4 @@ router.put("/editComment/:id", verifyToken, communityController.editComment);
 router.delete("/deleteComment/:id", verifyToken, communityController.deleteComment);
 
 export default router;
+

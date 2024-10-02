@@ -4,9 +4,6 @@ import { client } from "../dbconfig.js";
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import cloudinary from '../upload.js';
-import cors from "cors"
-
-app.use(cors());
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -28,7 +25,7 @@ const controller = {
 
             try {
                 const uploadWithoutFile = await client.query(queryWithoutFile, [title, text, id_user]);
-                return res.status(200).send("Publicacion creada correctamente", uploadWithoutFile);
+                return res.status(200).send("Publicacion creada correctamente");
             } catch (err) {
                 return res.status(400).send("Error al crear publicacion")
             }
@@ -45,7 +42,7 @@ const controller = {
 
             try {
                 const uploadWithFile = await client.query(queryWithFile, [title, text, fileUrl, id_user]);
-                return res.status(200).send("Publicacion creada correctamente", uploadWithFile);
+                return res.status(200).send("Publicacion creada correctamente con foto");
             } catch (err) {
                 return res.status(400).send("Error al crear publicacion")
             }
