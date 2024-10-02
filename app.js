@@ -6,14 +6,15 @@ const app = express();
 // Definir puerto
 const PORT = 8000;
 
-// Configurar carpeta publica
-app.use(express.static("./public"));
-app.set("view engine", "ejs");
-
+app.options('*', cors());
 app.use(cors({
     origin: "*",
     methods: ["GET", "POST", "OPTIONS"]
 }));
+
+// Configurar carpeta publica
+app.use(express.static("./public"));
+app.set("view engine", "ejs");
 
 // Capturar el body
 app.use(express.urlencoded({ extended: true }));
