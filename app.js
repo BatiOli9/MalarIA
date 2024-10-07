@@ -6,7 +6,7 @@ const app = express();
 // Definir puerto
 const PORT = 8000;
 
-app.options('*', cors());
+// app.options('*', cors());
 app.use(cors({
     origin: "*",
     methods: ["GET", "POST", "OPTIONS"]
