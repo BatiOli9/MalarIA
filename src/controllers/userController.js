@@ -4,6 +4,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { client } from "../dbconfig.js";
 import "dotenv/config";
+import cloudinary from '../upload.js';
 
 const saltRounds = 10;
 
@@ -59,10 +60,8 @@ const controller = {
         const username = req.body.username;
         const email = req.body.email;
         const password = req.body.password;
-        const ocupacion = req.body.ocupacion;
-        const pais = req.body.pais;
         const hashedPassword = await bcrypt.hash(password, saltRounds);
-        const jerarquia = 1;
+        const admin = false;
 
         console.log(
             nombre,
@@ -87,10 +86,10 @@ const controller = {
             return res.status(500).json({ message: "Error al verificar email o username", error: error.message });
         }
 
-        let query = 'INSERT INTO public.users (nombre, apellido, username, email, id_jerarquia, id_ocupacion, id_pais, password) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)';
+        let query = 'INSERT INTO public.users (nombre, apellido, username, email, admin, password) VALUES ($1, $2, $3, $4, $5, $6)';
 
         try {
-            await client.query(query, [nombre, apellido, username, email, jerarquia, ocupacion, pais, hashedPassword]);
+            await client.query(query, [nombre, apellido, username, email, admin, hashedPassword]);
             res.json({ message: "Usuario registrado correctamente" });
         } catch (error) {
             console.error('Error al registrar usuario:', error); // Imprime el error en la consola
@@ -212,6 +211,25 @@ const controller = {
         } catch (err) {
             console.error('Error al hacer login:', err); // Imprime el error en la consola
             res.status(500).json({ message: "Error al hacer login", err: err.message });
+        }
+    },
+    photoProfile: async (req, res) => {
+        const photo = req.file.path;
+        const id = req.params.id;
+        
+        const result = await cloudinary.uploader.upload(photo, {
+            folder: "profile",
+        });
+
+        const photoUrl = result.secure_url;
+
+        const query = 'UPDATE public.users SET photo = $1 WHERE id = $2';
+        try {
+            await client.query(query, [photoUrl, id]);
+            res.json({ message: "Imagen subida correctamente" });
+        } catch (error) {
+            console.error('Error al subir foto:', error);
+            res.status(500).json({ message: "Error al subir foto", error: error.message });
         }
     }
 }
