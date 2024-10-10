@@ -13,11 +13,9 @@ Content-Type: application/json
 {
     "nombre": "Matias",
     "apellido": "Niebieski",
-    "username": "TuteNieb",
-    "email": "tute@gmail.com",
-    "password": "Tute123",
-    "ocupacion": 1,
-    "pais": 1
+    "username": "TuteNieb122",
+    "email": "tute122@gmail.com",
+    "password": "Tute123"
 }
 
 ### Agregar Usuarios Admin

@@ -43,16 +43,17 @@ const controller = {
     },
     uploadAnalyzePost: async (req, res) => {
         const imageFile = req.file.path;
-        const apellido = req.body.apellido;
-        const nombre = req.body.nombre;
+        const apellido = 'Safdieh';
+        const nombre = 'Oliver';
         const fecha = Date.now();
-        const resultados = 1;
-        const id_usuario = req.userId;
+        const id_usuario = 33;
 
         console.log(id_usuario);
 
         const extension = imageFile.split('.').pop();
         const extensionesPermitidas = ['pdf', 'png', 'jpeg', 'jpg'];
+
+        console.log('hola');
 
         if (!extensionesPermitidas.includes(extension)) {
             console.error('Extensión de archivo no permitida');

@@ -49,7 +49,7 @@ router.get("/analisisPorId", verifyToken, analyzeController.analisisPorId);
 // Subir Analisis (vista)
 router.get("/uploadAnalyze", analyzeController.uploadAnalyze);
 // Subir Analisis proceso
-router.post("/uploadAnalyzePost", upload.single('file'), verifyToken, analyzeController.uploadAnalyzePost);                                                                                                 
+router.post("/uploadAnalyzePost", upload.single('file'), analyzeController.uploadAnalyzePost);                                                                                                 
 
 // Eliminar Analisis Especifico
 router.delete("/deleteAnalyze/:id", verifyToken, analyzeController.deleteAnalyze);

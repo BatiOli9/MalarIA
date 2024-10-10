@@ -42,7 +42,7 @@ router.post("/registerAdmin", verifyAdmin, verifyToken, userController.registerA
 router.post("/register", userController.registerPost);
 
 // Upload Photo Profile
-router.post("/photoProfile/:id", upload.single("file"), userController.photoProfile);
+router.post("/photoProfile/:id", userController.photoProfile);
 
 // Devolver todos los usuarios
 router.get("/allUsers", verifyAdmin, verifyToken, userController.allUsers);
