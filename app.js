@@ -6,11 +6,13 @@ const app = express();
 // Definir puerto
 const PORT = 8000;
 
-// app.options('*', cors());
-app.use(cors({
-    origin: "*",
+const corsOptions = {
+    origin: "*", // Cambia esto a un dominio específico en producción
     methods: ["GET", "POST", "OPTIONS"]
-}));
+};
+
+// Aplicar CORS
+app.use(cors(corsOptions));
 
 // Configurar carpeta publica
 app.use(express.static("./public"));

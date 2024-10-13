@@ -42,9 +42,10 @@ const controller = {
         res.render('upload');
     },
     uploadAnalyzePost: async (req, res) => {
+        console.log(req.body);
         const imageFile = req.file.path;
-        const apellido = 'Safdieh';
-        const nombre = 'Oliver';
+        const apellido = req.body.apellido;
+        const nombre = req.body.nombre;
         const fecha = Date.now();
         const id_usuario = 33;
 
@@ -69,8 +70,8 @@ const controller = {
             const imageUrl = result.secure_url; // Obtener el link de la imagen subida
 
             // Insertar el análisis en la base de datos, incluyendo el URL de la imagen
-            const query = 'INSERT INTO public.analisis (imagen, nombre, fecha, resultados, apellido) VALUES ($1, $2, $3, $4, $5)';
-            await client.query(query, [imageUrl, nombre, fecha, resultados, apellido]);
+            const query = 'INSERT INTO public.analisis (imagen, nombre, fecha, apellido) VALUES ($1, $2, $3, $4)';
+            await client.query(query, [imageUrl, nombre, fecha, apellido]);
 
             const query2 = 'SELECT id FROM public.analisis WHERE imagen = $1';
             const result2 = await client.query(query2, [imageUrl]);
