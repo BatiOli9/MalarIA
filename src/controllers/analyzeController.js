@@ -83,37 +83,6 @@ const controller = {
 
             fs.unlinkSync(imageFile); // Eliminar el archivo local
 
-            /* try {
-                const response = await fetch("https://tu-servidor-de-ia.com/analyze", {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ 
-                        imageUrl
-                    }),
-                })
-
-                const data = await response.json();
-
-                if (response.ok) {
-                    message: "Análisis subido y enviado a IA correctamente",
-                    imageUrl
-                } else {
-                    console.error('Error al enviar la imagen a IA:', data.message);
-                    res.status(500).json({
-                        message: "Error al enviar la imagen al servidor de IA",
-                        error: data.message,
-                    });
-                }e
-            } catch (err) {
-                console.error('Error en la comunicación con IA:', iaError);
-                res.status(500).json({
-                    message: "Error en la comunicación con el servidor de IA",
-                    error: iaError.message,
-                });
-            } */
-
             res.json({ message: "Análisis subido correctamente", imageUrl });
         } catch (error) {
             console.error('Error al subir análisis:', error);
