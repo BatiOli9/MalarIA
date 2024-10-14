@@ -4,6 +4,8 @@ import { client } from "../dbconfig.js";
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import cloudinary from '../upload.js';
+/* import FormData from 'form-data';
+import fetch from 'node-fetch'; */
 
 const controller = {
     todosAnalisis: async (req, res) => {
@@ -81,7 +83,32 @@ const controller = {
             const query3 = 'INSERT INTO public.manipulacion (id_analisis, id_usuarios) VALUES ($1, $2)';
             await client.query(query3, [id_requerido, id_usuario]);
 
-            fs.unlinkSync(imageFile); // Eliminar el archivo local
+            try {
+                const file = imageFile;
+                console.log(file);  
+            
+                const formData = new FormData();
+                formData.append('file', file);
+            
+                const response = await fetch("https://project-malaria.onrender.com/uploadfile", {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+                console.log(data);
+                if (response.ok) {
+                    return res.json({ message: "Análisis subido correctamente", imageUrl }); // Use return here
+                } else {
+                    console.error('Error al subir análisis:' + data.message);
+                    return res.status(500).json("Error al subir análisis"); // Use return here
+                }
+            } catch (err) {
+                console.error('Error en la comunicación con IA:', err);
+                res.status(500).json({
+                    message: "Error en la comunicación con el servidor de IA",
+                    error: err.message,
+                });
+            }
 
             res.json({ message: "Análisis subido correctamente", imageUrl });
         } catch (error) {
