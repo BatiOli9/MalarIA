@@ -84,23 +84,58 @@ const controller = {
             await client.query(query3, [id_requerido, id_usuario]);
 
             try {
-                const file = imageFile;
-                console.log(file);  
+                const body = {
+                    url: imageUrl
+                }
             
-                const formData = new FormData();
-                formData.append('file', file);
-            
-                const response = await fetch("https://project-malaria.onrender.com/uploadfile", {
+                const response = await fetch("https://project-malaria.onrender.com/analyze_image", {
                     method: 'POST',
-                    body: formData
+                    headers: {
+                        "content-type": "application/json",
+                    },
+                    body: JSON.stringify(body)
                 });
                 const data = await response.json();
                 console.log(data);
+                const prediccion = data.prediction;
+                if (prediccion === "Infectado") {
+                    const resultado = true;
+                    const query4 = 'UPDATE public.analisis SET resultados = $1 WHERE id = $2';
+                    try {
+                        await client.query(query4, [resultado, id_requerido]);
+                        console.log('Resultado actualizado correctamente');
+                    } catch (error) {
+                        console.error('Error al actualizar resultado:', error);
+                        res.status(500).json({ message: "Error al actualizar resultado", error: error.message });
+                    }
+                }
+                else if (prediccion === "Sano") {
+                    const resultado = false;
+                    const query4 = 'UPDATE public.analisis SET resultados = $1 WHERE id = $2';
+                    try {
+                        await client.query(query4, [resultado, id_requerido]);
+                        console.log('Resultado actualizado correctamente');
+                    } catch (error) {
+                        console.error('Error al actualizar resultado:', error);
+                        res.status(500).json({ message: "Error al actualizar resultado", error: error.message });
+                    }
+                }
+                
                 if (response.ok) {
-                    return res.json({ message: "Análisis subido correctamente", imageUrl }); // Use return here
+                    // Eliminar el archivo local después de subirlo y analizarlo
+                    fs.unlink(imageFile, (err) => {
+                        if (err) {
+                            console.error('Error al eliminar el archivo local:', err);
+                        } else {
+                            console.log('Archivo local eliminado correctamente');
+                        }
+                    });
+    
+                    return res.json({ message: "Análisis subido correctamente", imageUrl });
                 } else {
+                    console.log(data);
                     console.error('Error al subir análisis:' + data.message);
-                    return res.status(500).json("Error al subir análisis"); // Use return here
+                    return res.status(500).json("Error al subir análisis");
                 }
             } catch (err) {
                 console.error('Error en la comunicación con IA:', err);
