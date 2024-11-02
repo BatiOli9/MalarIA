@@ -106,7 +106,7 @@ const controller = {
     },
     userById: async (req, res) => {
         const id = req.params.id;
-        let query = "SELECT id, nombre, apellido, username, email, id_jerarquia, id_ocupacion, id_pais, password FROM public.users WHERE id = $1";
+        let query = "SELECT id, nombre, apellido, username, email FROM public.users WHERE id = $1";
     
         try {
             const result = await client.query(query, [id]);
@@ -190,6 +190,7 @@ const controller = {
             }
     
             const user = result.rows[0];
+            console.log(user.id);
             console.log('User found:', user); // Log para verificar el usuario encontrado
     
             const isPasswordValid = await bcrypt.compare(password, user.password);
@@ -205,7 +206,7 @@ const controller = {
                 { expiresIn: "1h" }
             );
     
-            return res.status(200).json({ token });
+            return res.status(200).json({ token, id: user.id });
         } catch (err) {
             console.error('Error al hacer login:', err); // Imprime el error en la consola
             res.status(500).json({ message: "Error al hacer login", err: err.message });
@@ -228,6 +229,55 @@ const controller = {
         } catch (error) {
             console.error('Error al subir foto:', error);
             res.status(500).json({ message: "Error al subir foto", error: error.message });
+        }
+    },
+    editEmail: async (req, res) => {
+        const id = req.params.id;
+        const email = req.body.email;
+        console.log(email)
+
+        const query = 'UPDATE public.users SET email = $1 WHERE id = $2'
+        try {
+            const resulthOLA = await client.query(query, [email, id]);
+            res.json({message: "Editado Correctamente"});
+        } catch (err) {
+            console.error("Error al modificar mail");
+        }
+    },
+    editNombre: async (req, res) => {
+        const id = req.params.id;
+        const nombre = req.body.nombre;
+
+        const query = 'UPDATE public.users SET nombre = $1 WHERE id = $2'
+        try {
+            await client.query(query, [nombre, id]);
+            res.json({message: "Editado Correctamente"});
+        } catch (err) {
+            console.error("Error al modificar nombre");
+        }
+    },
+    editApellido: async (req, res) => {
+        const id = req.params.id;
+        const apellido = req.body.apellido;
+
+        const query = 'UPDATE public.users SET apellido = $1 WHERE id = $2'
+        try {
+            await client.query(query, [apellido, id]);
+            res.json({message: "Editado Correctamente"});
+        } catch (err) {
+            console.error("Error al modificar apellido");
+        }
+    },
+    editUsername: async (req, res) => {
+        const id = req.params.id;
+        const username = req.body.username;
+
+        const query = 'UPDATE public.users SET username = $1 WHERE id = $2'
+        try {
+            await client.query(query, [username, id]);
+            res.json({message: "Editado Correctamente"});
+        } catch (err) {
+            console.error("Error al modificar username");
         }
     }
 }

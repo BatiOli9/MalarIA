@@ -59,4 +59,16 @@ router.delete("/deleteUser/:id", verifyToken, userController.deleteUser);
 // Login
 router.post("/login", userController.login);
 
+// Editar Email
+router.post("/editEmail/:id", verifyToken, userController.editEmail);
+
+// Editar Nombre
+router.post("/editNombre/:id", verifyToken, userController.editNombre);
+
+// Editar Apellido
+router.post("/editApellido/:id", verifyToken, userController.editApellido);
+
+// Editar Username
+router.post("/editUsername/:id", verifyToken, userController.editUsername);
+
 export default router;
