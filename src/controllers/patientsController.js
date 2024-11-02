@@ -4,19 +4,19 @@ import { client } from "../dbconfig.js";
 
 const controller = {
     registerPatient: async (req, res) => {
+        console.log(req.body)
         const nombre = req.body.nombre;
         const apellido = req.body.apellido;
-        const descripcion = req.body.descripcion;
-        const id_pais = req.body.pais;
+        const descripcion = "descripcion";
+        const id_pais = 1;
         const id_user = 5;
         const email = req.body.email;
         const phone = req.body.phone;
-        const fecha_nacimiento = req.body.nacimiento;
 
-        let query = 'INSERT INTO public.pacientes (nombre, apellido, descripcion, id_pais, id_user, email, phone, fecha_nacimiento) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)';
+        let query = 'INSERT INTO public.pacientes (nombre, apellido, descripcion, id_pais, id_user, email, phone) VALUES ($1, $2, $3, $4, $5, $6, $7)';
 
         try {
-            await client.query(query, [nombre, apellido, descripcion, id_pais, id_user, email, phone, fecha_nacimiento]);
+            await client.query(query, [nombre, apellido, descripcion, id_pais, id_user, email, phone]);
             res.json({ message: "Paciente registrado correctamente" });
         } catch (error) {
             console.error('Error al registrar paciente:', error); // Imprime el error en la consola
