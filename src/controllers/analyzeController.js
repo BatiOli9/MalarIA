@@ -12,7 +12,7 @@ const controller = {
         const query = "SELECT * FROM public.analisis";
         try {
             const result = await client.query(query);
-            res.json(result);
+            res.send(result);
         } catch (err) {
             console.error('Error al requerir analisis:', err);
             res.status(500).json({ message: "Error al requerir analisis", err: err.message });
@@ -21,6 +21,17 @@ const controller = {
     analisisPorPaciente: async (req, res) => {
         const id = req.params.id;
         const query = "SELECT * FROM public.analisis WHERE id_paciente = $1";
+        try {
+            const result = await client.query(query, [id]);
+            res.json(result);
+        } catch (err) {
+            console.error('Error al requerir analisis:', err);
+            res.status(500).json({ message: "Error al requerir analisis", err: err.message });
+        }
+    },
+    analisisPorUsuario: async (req, res) => {
+        const id = req.params.id;
+        const query = "SELECT * FROM public.analisis WHERE id_usuario = $1";
         try {
             const result = await client.query(query, [id]);
             res.json(result);
@@ -49,7 +60,7 @@ const controller = {
         const apellido = req.body.apellido;
         const nombre = req.body.nombre;
         const fecha = Date.now();
-        const id_usuario = 33;
+        const id_usuario = req.body.id;
 
         console.log(id_usuario);
 
@@ -72,8 +83,8 @@ const controller = {
             const imageUrl = result.secure_url; // Obtener el link de la imagen subida
 
             // Insertar el análisis en la base de datos, incluyendo el URL de la imagen
-            const query = 'INSERT INTO public.analisis (imagen, nombre, fecha, apellido) VALUES ($1, $2, $3, $4)';
-            await client.query(query, [imageUrl, nombre, fecha, apellido]);
+            const query = 'INSERT INTO public.analisis (imagen, nombre, fecha, apellido, id_usuario) VALUES ($1, $2, $3, $4, $5)';
+            await client.query(query, [imageUrl, nombre, fecha, apellido, id_usuario]);
 
             const query2 = 'SELECT id FROM public.analisis WHERE imagen = $1';
             const result2 = await client.query(query2, [imageUrl]);
@@ -141,11 +152,11 @@ const controller = {
                 console.error('Error en la comunicación con IA:', err);
                 res.status(500).json({
                     message: "Error en la comunicación con el servidor de IA",
-                    error: err.message,
+                    error: err.message, 
                 });
             }
 
-            res.json({ message: "Análisis subido correctamente", imageUrl });
+            res.json({ message: "Análisis subido correctamente", imageUrl, prediccion });
         } catch (error) {
             console.error('Error al subir análisis:', error);
             res.status(500).json({ message: "Error al subir análisis", error: error.message });
@@ -191,6 +202,16 @@ const controller = {
         } catch (error) {
             console.error('Error al agregar colaborador:', error);
             res.status(500).json({ message: "Error al agregar colaborador", error: error.message });
+        }
+    },
+    promedioResultados: async (req, res) => {
+        const query = 'SELECT resultados FROM public.analisis'
+        try {
+            const result = await client.query(query);
+            res.json(result); 
+        } catch (err) {
+            console.error('Error al requerir resultados:', err);
+            res.status(500).json({ message: "Error al requerir resultados", err: err.message });
         }
     }
 }

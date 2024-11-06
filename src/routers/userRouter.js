@@ -48,7 +48,7 @@ router.post("/photoProfile/:id", userController.photoProfile);
 router.get("/allUsers", verifyAdmin, verifyToken, userController.allUsers);
 
 // Devolver usuario por id
-router.get("/user/:id", verifyToken, userController.userById);
+router.get("/user/:id", userController.userById);
 
 // Editar un usuario existente
 router.put("/editUser/:id", verifyToken, userController.editUser);

@@ -38,7 +38,10 @@ const upload = multer({
 });
 
 // Devolver todos los analisis
-router.get("/todosAnalisis", verifyAdmin, verifyToken, analyzeController.todosAnalisis);
+router.get("/todosAnalisis", analyzeController.todosAnalisis);
+
+// Devolver analisis por usuario
+router.get("/analisisPorUsuario/:id", analyzeController.analisisPorUsuario);
 
 // Devolver analisis por paciente
 router.get("/analisisPorPaciente/:id", verifyToken, analyzeController.analisisPorPaciente);
@@ -59,5 +62,8 @@ router.put("/editAnalyze/:id", verifyToken, analyzeController.editAnalyze);
 
 // Agregar Colbadoradores al analisis
 router.put("/addCollaborators/:id", verifyToken, analyzeController.addCollaborators);
+
+// Promedio de Analisis
+router.get("/promedioResultados", analyzeController.promedioResultados);
 
 export default router;
