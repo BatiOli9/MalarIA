@@ -71,4 +71,10 @@ router.post("/editApellido/:id", verifyToken, userController.editApellido);
 // Editar Username
 router.post("/editUsername/:id", verifyToken, userController.editUsername);
 
+// Recuperar Contraseña (enviar correo)
+router.post("/sendPasswordResetEmail", userController.sendPasswordResetEmail);
+
+// Recuperar Contraseña (cambiar)
+router.post("/resetPassword", userController.resetPassword);
+
 export default router;

@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken';
 import { client } from "../dbconfig.js";
 import "dotenv/config";
 import cloudinary from '../upload.js';
+import nodemailer from "nodemailer";
 
 const saltRounds = 10;
 
@@ -278,6 +279,62 @@ const controller = {
             res.json({message: "Editado Correctamente"});
         } catch (err) {
             console.error("Error al modificar username");
+        }
+    },
+    sendPasswordResetEmail: async (req, res) => {
+        const email = req.body.email;
+
+        try {
+            const query = 'SELECT id, email FROM public.users WHERE email = $1';
+            const result = await client.query(query, [email]);
+
+            if (result.rows.length === 0) {
+                return res.status(404).json({ message: "Email no encontrado" });
+            }
+
+            const user = result.rows[0];
+            const token = jwt.sign({ userId: user.id }, secret, { expiresIn: '1h' });
+            const resetLink = `https://tuweb.com/reset-password?token=${token}`;
+
+            // Configuración del transporte para enviar el correo electrónico
+            const transporter = nodemailer.createTransport({
+                service: 'gmail', // o cualquier servicio que uses
+                auth: {
+                    user: process.env.EMAIL_USER, // email del remitente
+                    pass: process.env.EMAIL_PASS  // contraseña del remitente
+                }
+            });
+
+            const mailOptions = {
+                from: process.env.EMAIL_USER,
+                to: email,
+                subject: 'Recuperación de contraseña',
+                text: `Haz clic en el siguiente enlace para restablecer tu contraseña: ${resetLink}`,
+                html: `<p>Haz clic en el siguiente enlace para restablecer tu contraseña:</p><a href="${resetLink}">${resetLink}</a>`
+            };
+
+            await transporter.sendMail(mailOptions);
+
+            res.json({ message: "Correo de recuperación enviado" });
+        } catch (error) {
+            console.error('Error al enviar el correo de recuperación:', error);
+            res.status(500).json({ message: "Error al enviar el correo de recuperación", error: error.message });
+        }
+    },
+    resetPassword: async (req, res) => {
+        const { token, newPassword } = req.body;
+
+        try {
+            const decoded = jwt.verify(token, secret);
+            const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+
+            const query = 'UPDATE public.users SET password = $1 WHERE id = $2';
+            await client.query(query, [hashedPassword, decoded.userId]);
+
+            res.json({ message: "Contraseña restablecida correctamente" });
+        } catch (error) {
+            console.error('Error al restablecer la contraseña:', error);
+            res.status(500).json({ message: "Error al restablecer la contraseña", error: error.message });
         }
     }
 }
