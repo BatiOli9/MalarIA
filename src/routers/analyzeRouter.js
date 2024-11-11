@@ -47,7 +47,7 @@ router.get("/analisisPorUsuario/:id", analyzeController.analisisPorUsuario);
 router.get("/analisisPorPaciente/:id", verifyToken, analyzeController.analisisPorPaciente);
 
 // Devolver analisis por ID
-router.get("/analisisPorId", verifyToken, analyzeController.analisisPorId);
+router.get("/analisisPorId/:id", verifyToken, analyzeController.analisisPorId);
 
 // Subir Analisis (vista)
 router.get("/uploadAnalyze", analyzeController.uploadAnalyze);
