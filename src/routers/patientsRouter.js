@@ -22,4 +22,7 @@ router.delete("/deletePacient/:id", verifyToken, patientsController.deletePacien
 // Ver todos los pacientes de un usuario
 router.get("/pacientsByUser/:id", verifyToken, patientsController.pacientsByUser);
 
+// Devolver paciente por id
+router.get("/pacientById/:id", verifyToken, patientsController.pacientById);
+
 export default router;

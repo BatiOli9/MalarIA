@@ -9,15 +9,16 @@ const controller = {
         const apellido = req.body.apellido;
         const descripcion = "descripcion";
         const id_pais = 1;
-        const id_user = 5;
+        const id_user = req.body.id_user;
         const email = req.body.email;
         const phone = req.body.phone;
 
         let query = 'INSERT INTO public.pacientes (nombre, apellido, descripcion, id_pais, id_user, email, phone) VALUES ($1, $2, $3, $4, $5, $6, $7)';
 
         try {
-            await client.query(query, [nombre, apellido, descripcion, id_pais, id_user, email, phone]);
-            res.json({ message: "Paciente registrado correctamente" });
+            const result = await client.query(query, [nombre, apellido, descripcion, id_pais, id_user, email, phone]);
+
+            return res.json({ message: "Paciente registrado correctamente", id: result.rows[0].id });
         } catch (error) {
             console.error('Error al registrar paciente:', error); // Imprime el error en la consola
             res.status(500).json({ message: "Error al registrar paciente", error: error.message });
@@ -105,7 +106,24 @@ const controller = {
             console.error('Error al requerir usuario:', err); // Imprime el error en la consola
             res.status(500).json({ message: "Error al requerir usuario", err: err.message });
         }
-    } 
+    },
+    pacientById: async (req, res) => {
+        const id = req.params.id;
+
+        const query = 'SELECT * FROM public.pacientes WHERE id = $1';
+
+        try {
+            const result = await client.query(query, [id]);
+            if (result.rows.length > 0) {
+                res.json(result.rows);
+            } else {
+                res.status(404).json({ message: "Paciente no encontrado" });
+            }
+        } catch (err) {
+            console.error('Error al requerir paciente:', err); // Imprime el error en la consola
+            res.status(500).json({ message: "Error al requerir paciente", err: err.message });
+        }
+    }
 }
 
 export default controller;
