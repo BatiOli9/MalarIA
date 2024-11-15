@@ -16,9 +16,8 @@ const controller = {
         let query = 'INSERT INTO public.pacientes (nombre, apellido, descripcion, id_pais, id_user, email, phone) VALUES ($1, $2, $3, $4, $5, $6, $7)';
 
         try {
-            const result = await client.query(query, [nombre, apellido, descripcion, id_pais, id_user, email, phone]);
-
-            return res.json({ message: "Paciente registrado correctamente", id: result.rows[0].id });
+            await client.query(query, [nombre, apellido, descripcion, id_pais, id_user, email, phone]);
+            return res.json({ message: "Paciente registrado correctamente"});
         } catch (error) {
             console.error('Error al registrar paciente:', error); // Imprime el error en la consola
             res.status(500).json({ message: "Error al registrar paciente", error: error.message });

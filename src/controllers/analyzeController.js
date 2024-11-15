@@ -213,6 +213,19 @@ const controller = {
             console.error('Error al requerir resultados:', err);
             res.status(500).json({ message: "Error al requerir resultados", err: err.message });
         }
+    },
+    analisisPorNombre: async (req, res) => {
+        const nombre = req.body.nombre;
+
+        const query = 'SELECT * FROM public.analisis WHERE nombre = $1';
+
+        try {
+            const result = await client.query(query, [nombre]);
+            res.json(result);
+        } catch (err) {
+            console.error('Error al requerir analisis:', err);
+            res.status(500).json({ message: "Error al requerir analisis", err: err.message });
+        }
     }
 }
 

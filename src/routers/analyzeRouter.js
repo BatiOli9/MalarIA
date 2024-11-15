@@ -66,4 +66,6 @@ router.put("/addCollaborators/:id", verifyToken, analyzeController.addCollaborat
 // Promedio de Analisis
 router.get("/promedioResultados", analyzeController.promedioResultados);
 
+router.get("/analisisPorNombre", analyzeController.analisisPorNombre);
+
 export default router;
