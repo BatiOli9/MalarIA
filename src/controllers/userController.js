@@ -9,6 +9,26 @@ import nodemailer from "nodemailer";
 
 const saltRounds = 10;
 
+const sendEmail = async (to, subject, text, html) => {
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASS
+        }
+    });
+
+    const mailOptions = {
+        from: process.env.EMAIL_USER,
+        to,
+        subject,
+        text,
+        html
+    };
+
+    await transporter.sendMail(mailOptions);
+};
+
 const controller = {
     registerPost: async (req, res) => {
         console.log(req.body);
@@ -330,6 +350,65 @@ const controller = {
 
             const query = 'UPDATE public.users SET password = $1 WHERE id = $2';
             await client.query(query, [hashedPassword, decoded.userId]);
+
+            res.json({ message: "Contraseña restablecida correctamente" });
+        } catch (error) {
+            console.error('Error al restablecer la contraseña:', error);
+            res.status(500).json({ message: "Error al restablecer la contraseña", error: error.message });
+        }
+    },
+    sendPasswordResetEmail: async (req, res) => {
+        const email = req.body.email;
+        const secret = "HolaMundo";
+
+        try {
+            const query = 'SELECT id, email FROM public.users WHERE email = $1';
+            const result = await client.query(query, [email]);
+
+            if (result.rows.length === 0) {
+                return res.status(404).json({ message: "Email no encontrado" });
+            }
+
+            const user = result.rows[0];
+            const token = jwt.sign({ userId: user.id }, secret, { expiresIn: '1h' });
+            const resetLink = `https://tuweb.com/reset-password?token=${token}`;
+            const youtubeLink = "https://www.youtube.com/";
+
+            await sendEmail(
+                email,
+                'Recuperación de contraseña',
+                `Haz clic en el siguiente enlace para restablecer tu contraseña: ${youtubeLink}`,
+                `<p>Haz clic en el siguiente enlace para restablecer tu contraseña:</p><a href="${youtubeLink}">${youtubeLink}</a>`
+            );
+
+            console.log(token);
+            res.json({ message: "Correo de recuperación enviado" });
+        } catch (error) {
+            console.error('Error al enviar el correo de recuperación:', error);
+            res.status(500).json({ message: "Error al enviar el correo de recuperación", error: error.message });
+        }
+    },
+    resetPassword: async (req, res) => {
+        const { token, newPassword } = req.body;
+        const secret = "HolaMundo";
+
+        try {
+            const decoded = jwt.verify(token, secret);
+            const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+
+            const query = 'UPDATE public.users SET password = $1 WHERE id = $2';
+            await client.query(query, [hashedPassword, decoded.userId]);
+
+            const userQuery = 'SELECT email FROM public.users WHERE id = $1';
+            const userResult = await client.query(userQuery, [decoded.userId]);
+            const userEmail = userResult.rows[0].email;
+
+            await sendEmail(
+                userEmail,
+                'Confirmación de cambio de contraseña',
+                'Tu contraseña ha sido cambiada exitosamente.',
+                '<p>Tu contraseña ha sido cambiada exitosamente.</p>'
+            );
 
             res.json({ message: "Contraseña restablecida correctamente" });
         } catch (error) {
