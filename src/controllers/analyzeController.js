@@ -168,10 +168,17 @@ const controller = {
     },
     deleteAnalyze: async (req, res) => {
         const id = req.params.id;
-
-        const query = 'DELETE FROM public.analisis WHERE id = $1';
+    
+        const deleteManipulacionQuery = 'DELETE FROM public.manipulacion WHERE id_analisis = $1';
+        const deleteAnalisisQuery = 'DELETE FROM public.analisis WHERE id = $1';
+    
         try {
-            await client.query(query, [id]);
+            // Eliminar referencias en la tabla manipulacion
+            await client.query(deleteManipulacionQuery, [id]);
+    
+            // Eliminar el análisis
+            await client.query(deleteAnalisisQuery, [id]);
+    
             res.json({ message: "Análisis eliminado correctamente" });
         } catch (error) {
             console.error('Error al eliminar análisis:', error);
