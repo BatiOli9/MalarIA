@@ -8,7 +8,7 @@ const PORT = 8000;
 
 const corsOptions = {
     origin: "*", // Cambia esto a un dominio específico en producción
-    methods: ["GET", "POST", "OPTIONS"],
+    methods: ["GET", "POST", "OPTIONS", "DELETE", "PUT"],
     optionsSuccessStatus: 200
 };
 
