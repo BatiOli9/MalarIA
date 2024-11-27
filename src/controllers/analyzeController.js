@@ -56,49 +56,63 @@ const controller = {
     },
     uploadAnalyzePost: async (req, res) => {
         console.log(req.body);
-        const imageFile = req.file.path;
+        const imageFile = req.file;
         const apellido = req.body.apellido;
         const nombre = req.body.nombre;
         const fecha = Date.now();
         const id_usuario = req.body.id;
-
+    
         console.log(id_usuario);
-
-        const extension = imageFile.split('.').pop();
+    
+        const extension = imageFile.originalname.split('.').pop();
         const extensionesPermitidas = ['pdf', 'png', 'jpeg', 'jpg'];
-
+    
         console.log('hola');
-
+    
         if (!extensionesPermitidas.includes(extension)) {
             console.error('Extensión de archivo no permitida');
             return res.status(400).send('Error: Extensión de archivo no permitida. Extensiones admitidas: PDF, PNG, JPEG, y JPG');
         }
-
+    
         // Subir la imagen a Cloudinary
         try {
-            const result = await cloudinary.uploader.upload(imageFile, {
-                folder: 'analisis',
+            const result = await new Promise((resolve, reject) => {
+                const stream = cloudinary.uploader.upload_stream({
+                    folder: 'analisis',
+                }, (error, result) => {
+                    if (error) {
+                        reject(error);
+                    } else {
+                        resolve(result);
+                    }
+                });
+    
+                stream.end(imageFile.buffer);
             });
-
+    
             const imageUrl = result.secure_url; // Obtener el link de la imagen subida
-
+            console.log('Imagen subida a Cloudinary:', imageUrl);
+    
             // Insertar el análisis en la base de datos, incluyendo el URL de la imagen
             const query = 'INSERT INTO public.analisis (imagen, nombre, fecha, apellido, id_usuario) VALUES ($1, $2, $3, $4, $5)';
             await client.query(query, [imageUrl, nombre, fecha, apellido, id_usuario]);
-
+            console.log('Análisis insertado en la base de datos');
+    
             const query2 = 'SELECT id FROM public.analisis WHERE imagen = $1';
             const result2 = await client.query(query2, [imageUrl]);
-
+            console.log('ID del análisis obtenido:', result2.rows[0].id);
+    
             const id_requerido = result2.rows[0].id;
-
+    
             const query3 = 'INSERT INTO public.manipulacion (id_analisis, id_usuarios) VALUES ($1, $2)';
             await client.query(query3, [id_requerido, id_usuario]);
-
+            console.log('Manipulación insertada en la base de datos');
+    
             try {
                 const body = {
                     url: imageUrl
                 }
-
+    
                 const response = await fetch("https://project-malaria.onrender.com/analyze_image", {
                     method: 'POST',
                     headers: {
@@ -107,7 +121,7 @@ const controller = {
                     body: JSON.stringify(body)
                 });
                 const data = await response.json();
-                console.log(data);
+                console.log('Respuesta de la IA:', data);
                 const prediccion = data.prediction;
                 if (prediccion === "Infectado") {
                     const resultado = true;
@@ -117,7 +131,7 @@ const controller = {
                         console.log('Resultado actualizado correctamente');
                     } catch (error) {
                         console.error('Error al actualizar resultado:', error);
-                        res.status(500).json({ message: "Error al actualizar resultado", error: error.message });
+                        return res.status(500).json({ message: "Error al actualizar resultado", error: error.message });
                     }
                 }
                 else if (prediccion === "Sano") {
@@ -128,20 +142,11 @@ const controller = {
                         console.log('Resultado actualizado correctamente');
                     } catch (error) {
                         console.error('Error al actualizar resultado:', error);
-                        res.status(500).json({ message: "Error al actualizar resultado", error: error.message });
+                        return res.status(500).json({ message: "Error al actualizar resultado", error: error.message });
                     }
                 }
-
+    
                 if (response.ok) {
-                    // Eliminar el archivo local después de subirlo y analizarlo
-                    fs.unlink(imageFile, (err) => {
-                        if (err) {
-                            console.error('Error al eliminar el archivo local:', err);
-                        } else {
-                            console.log('Archivo local eliminado correctamente');
-                        }
-                    });
-
                     return res.json({ message: "Análisis subido correctamente", imageUrl });
                 } else {
                     console.log(data);
@@ -150,16 +155,15 @@ const controller = {
                 }
             } catch (err) {
                 console.error('Error en la comunicación con IA:', err);
-                res.status(500).json({
+                return res.status(500).json({
                     message: "Error en la comunicación con el servidor de IA",
                     error: err.message,
                 });
             }
-
-            res.json({ message: "Análisis subido correctamente", imageUrl, prediccion });
+    
         } catch (error) {
             console.error('Error al subir análisis:', error);
-            res.status(500).json({ message: "Error al subir análisis", error: error.message });
+            return res.status(500).json({ message: "Error al subir análisis", error: error.message });
         }
     },
     deleteAnalyze: async (req, res) => {
