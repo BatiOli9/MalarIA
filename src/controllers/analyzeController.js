@@ -98,7 +98,7 @@ const controller = {
                 const body = {
                     url: imageUrl
                 }
-            
+
                 const response = await fetch("https://project-malaria.onrender.com/analyze_image", {
                     method: 'POST',
                     headers: {
@@ -131,7 +131,7 @@ const controller = {
                         res.status(500).json({ message: "Error al actualizar resultado", error: error.message });
                     }
                 }
-                
+
                 if (response.ok) {
                     // Eliminar el archivo local después de subirlo y analizarlo
                     fs.unlink(imageFile, (err) => {
@@ -141,7 +141,7 @@ const controller = {
                             console.log('Archivo local eliminado correctamente');
                         }
                     });
-    
+
                     return res.json({ message: "Análisis subido correctamente", imageUrl });
                 } else {
                     console.log(data);
@@ -152,7 +152,7 @@ const controller = {
                 console.error('Error en la comunicación con IA:', err);
                 res.status(500).json({
                     message: "Error en la comunicación con el servidor de IA",
-                    error: err.message, 
+                    error: err.message,
                 });
             }
 
@@ -208,19 +208,19 @@ const controller = {
         const query = 'SELECT resultados FROM public.analisis'
         try {
             const result = await client.query(query);
-            res.json(result); 
+            res.json(result);
         } catch (err) {
             console.error('Error al requerir resultados:', err);
             res.status(500).json({ message: "Error al requerir resultados", err: err.message });
         }
     },
     analisisPorNombre: async (req, res) => {
-        const nombre = req.body.nombre;
-
-        const query = 'SELECT * FROM public.analisis WHERE nombre = $1';
-
+        const { nombre, id_usuario } = req.query;
+    
+        const query = 'SELECT * FROM public.analisis WHERE nombre ILIKE $1 AND id_usuario = $2';
+    
         try {
-            const result = await client.query(query, [nombre]);
+            const result = await client.query(query, [`%${nombre}%`, id_usuario]);
             res.json(result);
         } catch (err) {
             console.error('Error al requerir analisis:', err);
