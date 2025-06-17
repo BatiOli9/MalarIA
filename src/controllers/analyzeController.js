@@ -60,9 +60,9 @@ const controller = {
         const apellido = req.body.apellido;
         const nombre = req.body.nombre;
         const fecha = Date.now();
-        const id_usuario = req.body.id;
+        const userId = req.user.userId;
     
-        console.log(id_usuario);
+        console.log(userId);
     
         const extension = imageFile.originalname.split('.').pop();
         const extensionesPermitidas = ['pdf', 'png', 'jpeg', 'jpg'];
@@ -95,7 +95,7 @@ const controller = {
     
             // Insertar el análisis en la base de datos, incluyendo el URL de la imagen
             const query = 'INSERT INTO public.analisis (imagen, nombre, fecha, apellido, id_usuario) VALUES ($1, $2, $3, $4, $5)';
-            await client.query(query, [imageUrl, nombre, fecha, apellido, id_usuario]);
+            await client.query(query, [imageUrl, nombre, fecha, apellido, userId]);
             console.log('Análisis insertado en la base de datos');
     
             const query2 = 'SELECT id FROM public.analisis WHERE imagen = $1';
@@ -105,7 +105,7 @@ const controller = {
             const id_requerido = result2.rows[0].id;
     
             const query3 = 'INSERT INTO public.manipulacion (id_analisis, id_usuarios) VALUES ($1, $2)';
-            await client.query(query3, [id_requerido, id_usuario]);
+            await client.query(query3, [id_requerido, userId]);
             console.log('Manipulación insertada en la base de datos');
     
             try {

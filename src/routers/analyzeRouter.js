@@ -39,7 +39,7 @@ router.get("/analisisPorPaciente/:id", analyzeController.analisisPorPaciente);
 router.get("/analisisPorId/:id", analyzeController.analisisPorId);
 
 // Subir análisis
-router.post("/uploadAnalyzePost", upload.single('file'), analyzeController.uploadAnalyzePost);
+router.post("/uploadAnalyzePost", verifyToken, upload.single('file'), analyzeController.uploadAnalyzePost);
 
 // Eliminar análisis
 router.delete("/deleteAnalyze/:id", analyzeController.deleteAnalyze);

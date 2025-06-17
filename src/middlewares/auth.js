@@ -30,7 +30,7 @@ export const verifyToken = async (req, res, next) => {
       return res.status(401).json({ message: 'Token Invalido' });
     }
 
-    req.userId = decoded.userId;
+    req.user = decoded;
     next();
   } catch (error) {
     return res.status(401).json({ message: 'Unauthorized', error: error.message });
@@ -39,10 +39,10 @@ export const verifyToken = async (req, res, next) => {
 
 export const verifyAdmin = async (req, res, next) => {
   try {
-    const id = req.userId;
+    const userId = req.user.userId;
 
     const query = "SELECT * FROM public.users WHERE id = $1"
-    const user = await client.query(query, [id]);
+    const user = await client.query(query, [userId]);
 
     if (!user) {
       console.log("No se han encontrado usuarios con ese ID");
